@@ -1,0 +1,32 @@
+Notes:
+
+I need to figure out how to debug in XCode. Unfortunately, cs193p covers this in a lab that is not recorded. It would be cool if someone recorded the lab, and I don't understand why they don't do this.
+
+(1.) An example function with external/internal names:
+
+func drawHorizontalLine(from startX: Double, to endX: Double, using color: UIColor) {
+    var distance = endX - startX
+}
+
+The external names are meant to be highly readable. For example a call to this function could be read as: "Draw a horizontal line from here to there using this color"
+
+This function would be called as follows:
+drawHorizontalLine(from: 5.0, to: 8.5, using: <#T##UIColor#>.blue)
+
+(2.) Note from lecture: underscore is sometimes used for the first argument
+     to a function but should almost *never* be used for any subsequent
+     arguments
+
+(3.) ***
+
+You can option+click on anything in XCode to pull up a window providing summary information about it. At the bottom of the window there will be a link to extensive documentation. Prof. Hegarty recommends reading the full documentation for the common classes in order to become a good iOS developer.
+
+(4.) use let for constants. This is a way to inform Swift that you do not intend to change the value. This can be useful for several reasons:
+-- Prevent yourself (or someone else) from accidentally mutating a value that they are not supposed to later on
+-- For things like Arrays that are values, Swift can optimize by not copying the value if it knows that it is not mutable.
+
+(5.) Control+Click+Drag to ViewController to take an element from the interface field and connect it to code in ViewController
+
+(6.) In XCode: select-all, then control+i for auto-indent all
+
+(7.) Right click on a button in the interface editor to see everything that it's hooked up to.
