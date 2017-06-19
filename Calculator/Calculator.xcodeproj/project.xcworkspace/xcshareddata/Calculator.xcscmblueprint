@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "9FAE4BD05F2BFC4B4CEC1917FE27D346016F7360",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "A8E26C5058371E36120C63854EA7BC3A86E3301E" : 9223372036854775807,
+    "9FAE4BD05F2BFC4B4CEC1917FE27D346016F7360" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "AA36F3DF-7B35-4ED5-A8D0-8A10CFE8472A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "A8E26C5058371E36120C63854EA7BC3A86E3301E" : "",
+    "9FAE4BD05F2BFC4B4CEC1917FE27D346016F7360" : "cs193p\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Calculator",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Calculator\/Calculator.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/jamesshapiro\/cs193p.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9FAE4BD05F2BFC4B4CEC1917FE27D346016F7360"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/jamesshapiro\/learning-swift.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "A8E26C5058371E36120C63854EA7BC3A86E3301E"
+    }
+  ]
+}

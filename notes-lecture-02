@@ -1,0 +1,100 @@
+Lecture Notes:
+
+(1.) MVC overview.
+
+Model:
+======
+The model should be flexible in terms of being able to operate with any
+controller or with multiple controllers. Therefore, the model cannot know
+anything specific about the controller. Hence, the model is limited in terms
+of how it can communicate things to the controller. The model broadcasts to
+the controller to let it know when something has been updated.
+
+View:
+=====
+The view consists of generic components (i.e. UIButton) and therefore cannot
+have specific knowledge about a particular controller. Hence, the view is
+also limited in terms of how it can communicate things to the controller. It
+does so using specialized methods.
+
+Controller:
+===========
+The controller can communicate with the model (for example, to receive new
+information to update itself) and with the view (for example, to tell it to
+display something).
+
+Other:
+======
+An application may have multiple MVCs. One MVC always serves as the view of
+another MVC. Models may communicate with other models.
+
+(2.) struct
+
+struct in Swift is not like struct in other languages. It is far more
+powerful and can have methods. In fact there are two key differences
+between structs and classes
+
+struct vs. class:
+=================
+(i.) struct is a value type. It lives on the stack, not the heap, and it
+is always copied when something refers to it. However, Swift uses
+copy-on-write, so the struct is only truly copied when it is modified
+by one of the "copies".
+
+(ii.) a struct cannot have inheritance.
+
+For the CalculatorBrain example we do not need inheritance or multiple
+reference to CalculatorBrain, so it makes sense to use a struct.
+
+Other things to know about struct:
+==================================
+You don't necessarily have to provide the "init" method for a struct,
+because they automatically come with a default initializer that
+initializes every uninitialized var.
+
+If you have a method that mutates the struct, you have to mark it as
+mutating. This is because of the copy-on-write behavior. We need this
+flag to alert Swift that a method can mutate the struct and require a
+new copy to be written into the stack.
+
+Xcode Tips and Tricks:
+======================
+--To easily set which editor appears in the right window of a split screen,
+(1.) click the Venn Diagram button for split-screen
+(2.) press Alt + select the file you want to open from the project directory
+--you can refactor a variable name by hovering over it, pressing the "v" button and selecting "Edit all in scope..."
+
+Associated Values:
+==================
+-- enums can have associated values:
+-- e.g., optional is an enum. It can be nil or set, with an associated value
+   (namely, whatever the value of the set optional is)
+
+UI Stuff:
+=========
+-- Editor > Embed In > Stack View
+   -- Alternatively, there is an "Embed In Stack" button!
+-- Element Inspector >
+   -- Spacing = 10
+   -- Distribution > Fill Equally
+-- Stack five horizontal stacks into a vertical stack
+   -- Alignment > Fill
+   -- Spacing = 10
+(*) Ctrl+Shift+Click lets you pick whatever part of the element
+    hierarchy you want.
+(*) Or just use drag-select
+
+For auto-alignment
+(*) (1.) Select the whole thing
+    (2.) Ctrl+drag to the top
+    (3.) When you let go, select "Vertical Spacing to Top Layout Guide"
+(*) Same for left but "Leading space to Container Margin"
+(*)  "    "  right "  'Trailing  "    "     "       "   '
+(*)          bottom    Vertical space to Bottom Layout Guide
+
+Now the right line to the right edge is too long, so double click on it
+ -- When Standard Value is available you will often want to use that, but
+    here it is grayed out.
+ -- So instead, we just set it to 0
+Additionally if we select the big box and go to the size inspector, we 
+can see all of these things at the bottom.
