@@ -19,6 +19,8 @@ struct CalculatorBrain {
         case equals
     }
     
+    
+    
     private var operations: Dictionary<String,Operation> = [
         "π" : Operation.constant(Double.pi),
         "e" : Operation.constant(M_E),
@@ -29,6 +31,10 @@ struct CalculatorBrain {
         "÷" : Operation.binaryOperation({ $0 / $1 }),
         "+" : Operation.binaryOperation({ $0 + $1 }),
         "−" : Operation.binaryOperation({ $0 - $1 }),
+        "x²" : Operation.unaryOperation({ $0 * $0 }),
+        "lg" : Operation.unaryOperation({ log2($0) }),
+        "eˣ" : Operation.unaryOperation({ pow(M_E, $0) }),
+        "1/x" : Operation.unaryOperation({ 1.0 / $0 }),
         "=" : Operation.equals
     ]
     
@@ -73,6 +79,7 @@ struct CalculatorBrain {
     
     mutating func setOperand(_ operand: Double) {
         accumulator = operand
+        //description = description + String(operand)
     }
     
     var result: Double? {
@@ -80,5 +87,14 @@ struct CalculatorBrain {
             return accumulator
         }
     }
+    
+    /*var descriptionResult: String? {
+        get {
+            if resultIsPending {
+                return description + " ..."
+            }
+            return description + "="
+        }
+    }*/
     
 }
