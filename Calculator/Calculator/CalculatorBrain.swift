@@ -10,8 +10,35 @@ import Foundation
 
 struct CalculatorBrain {
     
+    
+    
+    private var accumulater = Accumulater()
     private var accumulator: Double?
-
+    private var resultIsPending = false
+    private var description = ""
+    
+    func print_descrip() {
+        if let accumdec = accumulater.descrip {
+            if resultIsPending {
+                print(description + accumdec +  " ...")
+            } else {
+                print(description + accumdec +  " =")
+            }
+        } else {
+            if resultIsPending {
+                print(description +  " ...")
+            } else {
+                print(description +  " =")
+            }
+        }
+    }
+    
+    private class Accumulater {
+        var accumulator: Double?
+        var descrip: String?
+        
+    }
+    
     private enum Operation {
         case constant(Double)
         case unaryOperation((Double) -> Double)
@@ -19,7 +46,12 @@ struct CalculatorBrain {
         case equals
     }
     
-    
+    private enum DescribeOperation {
+        case constant(Double)
+        case unaryOperation((Double) -> Double)
+        case binaryOperation((String,String) -> String)
+        case equals
+    }
     
     private var operations: Dictionary<String,Operation> = [
         "π" : Operation.constant(Double.pi),
@@ -42,26 +74,42 @@ struct CalculatorBrain {
         if let operation = operations[symbol] {
             switch operation {
             case .constant(let value):
-                accumulator = value
+                accumulater.accumulator = value
+                accumulater.descrip = String(value)
             case .unaryOperation(let function):
-                if accumulator != nil {
-                    accumulator = function(accumulator!)
+                if accumulater.accumulator != nil {
+                    accumulater.accumulator = function(accumulater.accumulator!)
+                    if resultIsPending {
+                        accumulater.descrip = symbol + "(\(accumulater.descrip!))"
+                    } else {
+                        description = symbol + "(" + description + ")"
+                    }
+                    print_descrip()
                 }
             case .binaryOperation(let function):
-                if accumulator != nil {
-                    pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulator!)
-                    accumulator = nil
+                if accumulater.accumulator != nil {
+                    description = description + accumulater.descrip! + " " + symbol
+                    resultIsPending = true
+                    accumulater.descrip = nil
+                    print_descrip()
+                    pendingBinaryOperation = PendingBinaryOperation(function: function, firstOperand: accumulater.accumulator!)
+                    accumulater.accumulator = nil
+                    
                 }
                 break
             case .equals:
+                resultIsPending = false
                 performPendingBinaryOperation()
             }
         }
     }
-
+    
     private mutating func performPendingBinaryOperation() {
-        if pendingBinaryOperation != nil && accumulator != nil {
-            accumulator = pendingBinaryOperation!.perform(with: accumulator!)
+        if pendingBinaryOperation != nil && accumulater.accumulator != nil {
+            description = description + " " + accumulater.descrip! + " "
+            accumulater.descrip = ""
+            print_descrip()
+            accumulater.accumulator = pendingBinaryOperation!.perform(with: accumulater.accumulator!)
             pendingBinaryOperation = nil
         }
     }
@@ -78,23 +126,13 @@ struct CalculatorBrain {
     }
     
     mutating func setOperand(_ operand: Double) {
-        accumulator = operand
-        //description = description + String(operand)
+        accumulater.accumulator = operand
+        accumulater.descrip = String(operand)
     }
     
     var result: Double? {
         get {
-            return accumulator
+            return accumulater.accumulator
         }
     }
-    
-    /*var descriptionResult: String? {
-        get {
-            if resultIsPending {
-                return description + " ..."
-            }
-            return description + "="
-        }
-    }*/
-    
 }
