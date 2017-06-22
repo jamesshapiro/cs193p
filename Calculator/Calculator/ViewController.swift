@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController {
     
     @IBOutlet weak var display: UILabel!
+    @IBOutlet weak var arguments: UILabel!
     
     var userIsInTheMiddleOfTyping = false
     var userHasAlreadyTypedADecimalPoint = false
@@ -46,6 +47,15 @@ class ViewController: UIViewController {
         }
     }
     
+    var argumentsValue: String {
+        get {
+            return arguments.text!
+        }
+        set {
+            arguments.text = newValue
+        }
+    }
+    
     private var brain = CalculatorBrain()
     
     @IBAction func performOperation(_ sender: UIButton) {
@@ -57,8 +67,10 @@ class ViewController: UIViewController {
         if let mathematicalSymbol = sender.currentTitle {
             brain.performOperation(mathematicalSymbol)
         }
+        argumentsValue = brain.descriptionComputed
         if let result = brain.result {
             displayValue = result
+            argumentsValue = brain.descriptionComputed
         }
     }
 }

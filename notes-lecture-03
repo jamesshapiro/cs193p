@@ -43,7 +43,7 @@ switch x {
 }
 
 ====================
-Optionals can be ``chained''
+Optionals can be "chained"
 
 For example, hashValue is a var in String
 What if we wanted to get the hashValue from an Optional String?
@@ -65,7 +65,7 @@ if let x = display?.text?.hashValue { ... } // x is an Int
 
 ====================
 
-There is also an Optional ``defaulting'' operator: ??
+There is also an Optional "defaulting" operator: ??
 =====================================================
 What if we want to put a String into a UILabel, but if it's nil,
   put " " (space) in the UILabel?
@@ -90,7 +90,7 @@ What is a tuple?
 It is nothing more than a grouping of values.
 You can use it anywhere you can use a type.
 
-let x: (String, Int Double) = ("hello", 5, 0.85) // the type of x is ``a tuple''
+let x: (String, Int Double) = ("hello", 5, 0.85) // the type of x is "a tuple"
 let (word, number, value) = x // this names the tuple elements when accessing the tuple
 print(word) // prints hello
 print(number) // prints 5
@@ -144,9 +144,149 @@ let c = array[6...8] // runtime crash (array index out of bounds)
 let d = array[2...1] // runtime crash (lower bound must be smaller than upper bound)
 
 A String subrange is *not* Rnage<Int> (it's Range<String.Index>)
-let e = "hello"[2..<4] // this != ";;", in fact, it won't evne compile
+let e = "hello"[2..<4] // this != "ll", in fact, it won't even compile
 let f = "hello"[start..<end] // this is possible; we'll explain
-                             // start and end a bit later
+                             // start and end a bit later, they are not
+                             // ints, they're indexes (indices?)
 
+CountableRange:
+===============
+If the type of the upper/lower bound is an Int,  ..</... makes a CountableRange
+(Actually, it depends on whether the upper/lower bound is "strideable by Int" to be precise.)
+
+CountableRange is enumeratable with "for in"
+For example, this is how you do a C-like "for (i = 0; i < 20; i++)" loop ...
+
+for i in 0..<20 {
+}
+
+How about something like for(i = 0.5; i < 15.25; i += 0.3)?
+Floating point numbers don't stride by Int, they stride by a floating point value.
+So 0.5...15.25 is just a Range, not a CountableRange (which is needed for "for in").
+Lucky, there's a global function that will create a CountableRange from floating
+point values!
+
+for i in stride(from: 0.5, through: 15.25, by: 0.3) {
+}
+
+The return type of stride is CountableRange (actually ClosedCountableRange
+  in this case)
+
+Data Structures in Swift:
+=========================
+
+Classes, Structures, and Enumerations:
+======================================
+-- These are 3 of the 4 fundamental building blocks of data structures in Swift
+-- We have encountered them previously:
+---- Classes (ViewController), Structures (CalculatorBrain)
+     and Enumerations (operations)
+--The fourth building block is Protocols. We won't talk about this for a few
+  lectures, because they are less familiar to a lot of the class. However, they
+  are super important.
+
+Similarities:
+(1.) Declaration syntax... (classes can have superclasses, otherwise similar)
+
+class ViewController: ... {
+}
+struct CalculatorBrain {
+}
+enum Operation {
+} 
+
+(2.) They can all have properties and functions. However, an enum cannot
+     contain stored values (it uses associated values)
+
+func doit(argx argi: Type) -> ReturnValue {
+}
+
+var storedProperty = <initial value> (not enum)
+
+var computedProperty: Type {
+    get {}
+    set {}
+}
+
+(3.) They can all have initializers (except enums)
+
+init(arg1x arg1i: Type, arg2x arg2i: Type, ...) {
+
+} 
+
+Differences:
+============
+(1.) Inheritance (class only)
+(2.) Value type (struct, enum) vs. Reference type (class)
+
+Value:
+======
+- Copied when passed as an argument to a function
+- Copied when assigned to a different variable
+- Immutable if assigned to a variable with "let" (function parameters are "let")
+- You must note any "func" that can mutate a struct/enum with the keyword "mutating"
+
+Reference:
+==========
+- Stored in the heap and reference-counted (automatically)
+- Constant pointers to a class (let) still can mutate by calling methods and
+  changing properties
+- When passed as an argument, does not make a copy (just passing a pointer
+  to same instance)
+
+Choosing which to use?
+======================
+- Already discussed class versus struct in previous lecture (also in the
+  Reading Assignment). Use of enum is situational (any time you have a type
+  of data with discrete values).
+- value types are more of a functional paradigm. You can mix elements of
+  functional programming into your app with Swift, so value types are useful
+  for that. Especially with protocols and generics. The Swift foundation is really
+  designed with that in mind. And if you want to see good examples of that, chase
+  down parts of the foundation library (e.g. String, Range, Sequence, Comparable).
+  Those are all expressed with protocols using these immutable types and they use
+  Generics
+- Even if you're doing a typical non-functional approach, try to lean towards
+  immutability and ask yourself: "can this thing be immutable? Is there some
+  functionality that I can share by creating a generic, for example? Those leanings
+  will make it easier to write an app that is testable. It's a lot easier to
+  write a test for a mathematical function with a deterministic relationship
+  between input and output than it is for something where there's a lot of data
+  that requires you to set everything up before calling a method. That's much
+  more difficult to write test cases for.
+
+Methods:
+========
+
+Parameter names:
+- All parameters to all functions have an internal name and an external name.
+- The internal name is the name of the local variable you use inside the method.
+- The external name is what callers use when they call the method.
+- You can put _ if you don't want callers to use an external name at all for a
+  given parameter. 99.9% of the time that this happens, it is with the very
+  first argument and not with any subsequent arguments. You do this when the
+  context (between the name of the method and the type of the argument) makes
+  role of the argument so obvious that there is no point in using an external 
+  name. With subsequent arguments, we don't have the advantage of having the 
+  name of the method right there (in terms of words-in-a-sentence readability).
+  So that's why we almost never use an underscore for the later ones.
+- If you only put one parameter name, it will be both the external and internal 
+  name.
+
+func foo(externalFirst first: Int, externalSecond second: Double) {
+    var sum = 0.0
+    for _ in 0..<first { sum += second }
+}
+
+func bar() {
+    let result = foo(externalFirst: 123, externalSecond: 5.5)
+}
+
+You can override methods/properties from your superclass
+- However, you have to let Swift know about it.
+- Precede your func or var with the keyword override.
+- A method can be marked final which will prevent subclasses from being
+  able to override
+- Entire classes can also be marked final.
 
   
