@@ -8,29 +8,58 @@
 
 import Foundation
 
+extension String {
+    var condensedWhitespace: String {
+        let components = self.components(separatedBy: NSCharacterSet.whitespacesAndNewlines)
+        return components.filter { !$0.isEmpty }.joined(separator: " ")
+    }
+}
+
 struct CalculatorBrain {
-    
-    
-    
     private var accumulater = Accumulater()
     private var accumulator: Double?
     private var resultIsPending = false
     private var description = ""
     
-    func print_descrip() {
+    var descriptionComputed: String {
         if let accumdec = accumulater.descrip {
             if resultIsPending {
-                print(description + accumdec +  " ...")
+                let str = description + accumdec +  " ..."
+                return str.condensedWhitespace
             } else {
-                print(description + accumdec +  " =")
+                let str = description + accumdec +  " ="
+                return str.condensedWhitespace
             }
         } else {
             if resultIsPending {
-                print(description +  " ...")
+                let str = description +  " ..."
+                return str.condensedWhitespace
             } else {
-                print(description +  " =")
+                let str = description + " ="
+                return str.condensedWhitespace
             }
         }
+    }
+    
+    func print_descrip() {
+        print(descriptionComputed)
+        /*if let accumdec = accumulater.descrip {
+            if resultIsPending {
+                let str = description + accumdec +  " ..."
+                print(str.condensedWhitespace)
+            } else {
+                let str = description + accumdec +  " ="
+                print(str.condensedWhitespace)
+            }
+        } else {
+            if resultIsPending {
+                let str = description +  " ..."
+                print(str.condensedWhitespace)
+            } else {
+                let str = description + " ="
+                print(str.condensedWhitespace)
+            }
+        }*/
     }
     
     private class Accumulater {
@@ -75,14 +104,26 @@ struct CalculatorBrain {
             switch operation {
             case .constant(let value):
                 accumulater.accumulator = value
-                accumulater.descrip = String(value)
+                accumulater.descrip = symbol
             case .unaryOperation(let function):
                 if accumulater.accumulator != nil {
+                    var nsymbol = symbol
+                    if symbol == "1/x" {
+                        nsymbol = "1/"
+                    }
                     accumulater.accumulator = function(accumulater.accumulator!)
                     if resultIsPending {
-                        accumulater.descrip = symbol + "(\(accumulater.descrip!))"
+                        description = description + " "
+                        accumulater.descrip = nsymbol + "(\(accumulater.descrip!))"
                     } else {
-                        description = symbol + "(" + description + ")"
+                        if pendingBinaryOperation == nil {
+                            description = description + accumulater.descrip!
+                            accumulater.descrip = ""
+                            description = nsymbol + "(\(description))"
+                            
+                        } else {
+                        description = nsymbol + "(" + description + ")"
+                        }
                     }
                     print_descrip()
                 }
@@ -100,13 +141,14 @@ struct CalculatorBrain {
             case .equals:
                 resultIsPending = false
                 performPendingBinaryOperation()
+                print_descrip()
             }
         }
     }
     
     private mutating func performPendingBinaryOperation() {
         if pendingBinaryOperation != nil && accumulater.accumulator != nil {
-            description = description + " " + accumulater.descrip! + " "
+            description = description + " " + accumulater.descrip!
             accumulater.descrip = ""
             print_descrip()
             accumulater.accumulator = pendingBinaryOperation!.perform(with: accumulater.accumulator!)
@@ -126,6 +168,9 @@ struct CalculatorBrain {
     }
     
     mutating func setOperand(_ operand: Double) {
+        if accumulater.accumulator != nil {
+            description = ""
+        }
         accumulater.accumulator = operand
         accumulater.descrip = String(operand)
     }
