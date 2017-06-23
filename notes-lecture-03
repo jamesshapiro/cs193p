@@ -1,6 +1,11 @@
 Lecture 3: Swift Highlights:
 ============================
 
+Note: this lecture was mostly review. I've been reading through the language guide
+on my own. You can see my progress following along with it here:
+
+https://github.com/jamesshapiro/learning-swift/tree/master/language-guide-experiments
+
 (1.) Optionals
 An Optional is just an enum.
 
@@ -28,8 +33,6 @@ switch x {
     case non: // raise an exception
 }
 
-====================
-
 let x: String? = ...
 if let y = x {
     // do something with y
@@ -42,7 +45,6 @@ switch x {
         break
 }
 
-====================
 Optionals can be "chained"
 
 For example, hashValue is a var in String
@@ -63,12 +65,9 @@ if let x = display?.text?.hashValue { ... } // x is an Int
 
    let x = display?.text?.hashValue { ... } // x is an Int?
 
-====================
-
 There is also an Optional "defaulting" operator: ??
-=====================================================
-What if we want to put a String into a UILabel, but if it's nil,
-  put " " (space) in the UILabel?
+- What if we want to put a String into a UILabel, but if it's nil,
+- put " " (space) in the UILabel?
 
 let s: String? = ... // might be nil
 if s != nil {
@@ -86,9 +85,8 @@ display.text = s ?? " "
 Tuples
 ======
 What is a tuple?
-
-It is nothing more than a grouping of values.
-You can use it anywhere you can use a type.
+- It is nothing more than a grouping of values.
+- You can use it anywhere you can use a type.
 
 let x: (String, Int Double) = ("hello", 5, 0.85) // the type of x is "a tuple"
 let (word, number, value) = x // this names the tuple elements when accessing the tuple
@@ -97,15 +95,14 @@ print(number) // prints 5
 print(value) // prints 0.85
 
 ALTERNATIVELY: (preferred / recommended):
-=========================================
 let x: (w: String, i: Int, v: Double) = ("hello", 5, 0.85)
 print(x.w) // prints helo
 print(x.i) // prints 5
 print(x.v) // prints 0.85
 
 Tuples as return values.
-You can use tuples to return multiple values from a function or method ...
-func getSize() -> (weight: Double, height: Double) { return (250, 80) }
+- You can use tuples to return multiple values from a function or method ...
+- func getSize() -> (weight: Double, height: Double) { return (250, 80) }
 
 let x = getSize()
 print("weight is \(x.weight)") // weight is 250
@@ -114,7 +111,9 @@ print("height is \(getSize().height)") // height is 80
 
 ====================
 
-Range
+Range:
+======
+
   A Range in Swift is just two end points.
   A range can represent things like a selection in some text or a portion
     of an Array.
@@ -150,9 +149,9 @@ let f = "hello"[start..<end] // this is possible; we'll explain
                              // ints, they're indexes (indices?)
 
 CountableRange:
-===============
-If the type of the upper/lower bound is an Int,  ..</... makes a CountableRange
-(Actually, it depends on whether the upper/lower bound is "strideable by Int" to be precise.)
+- If the type of the upper/lower bound is an Int,  ..</... makes a CountableRange
+- (Actually, it depends on whether the upper/lower bound is "strideable by Int" to
+  be precise.)
 
 CountableRange is enumeratable with "for in"
 For example, this is how you do a C-like "for (i = 0; i < 20; i++)" loop ...
@@ -172,11 +171,12 @@ for i in stride(from: 0.5, through: 15.25, by: 0.3) {
 The return type of stride is CountableRange (actually ClosedCountableRange
   in this case)
 
+====================
+
 Data Structures in Swift:
 =========================
 
 Classes, Structures, and Enumerations:
-======================================
 -- These are 3 of the 4 fundamental building blocks of data structures in Swift
 -- We have encountered them previously:
 ---- Classes (ViewController), Structures (CalculatorBrain)
@@ -215,19 +215,16 @@ init(arg1x arg1i: Type, arg2x arg2i: Type, ...) {
 } 
 
 Differences:
-============
 (1.) Inheritance (class only)
 (2.) Value type (struct, enum) vs. Reference type (class)
 
 Value:
-======
 - Copied when passed as an argument to a function
 - Copied when assigned to a different variable
 - Immutable if assigned to a variable with "let" (function parameters are "let")
 - You must note any "func" that can mutate a struct/enum with the keyword "mutating"
 
 Reference:
-==========
 - Stored in the heap and reference-counted (automatically)
 - Constant pointers to a class (let) still can mutate by calling methods and
   changing properties
@@ -235,7 +232,6 @@ Reference:
   to same instance)
 
 Choosing which to use?
-======================
 - Already discussed class versus struct in previous lecture (also in the
   Reading Assignment). Use of enum is situational (any time you have a type
   of data with discrete values).
@@ -254,6 +250,8 @@ Choosing which to use?
   between input and output than it is for something where there's a lot of data
   that requires you to set everything up before calling a method. That's much
   more difficult to write test cases for.
+
+====================
 
 Methods:
 ========
@@ -289,4 +287,463 @@ You can override methods/properties from your superclass
   able to override
 - Entire classes can also be marked final.
 
+Both types and instances can have methods/properties
+- Type methods and properties are denoted wiht the keyword static
+- For example, the struct Double has a number of vars and funcs on its type.
+- These are not methods or vars you access on an instance of a Double (e.g. on 53.2).
+- Instead, you access them by referencing the Double type itself.
+
+static fun abs(d: Double) -> Double { if d < 0 { return -d } else { return d } }
+static var pi: Double { return 3.1415926 }
+let d = Double.pi
+let d = Double.abs(-324.44)
+
+// invalid: let e = x.pi
+// invalid: let e = x.abs(-22.5)
+
+====================
+
+Properties:
+===========
+
+Property Observers:
+- You can observe changes to any property with willSet and didSet
+- Will also be invoked if you mutate a struct (e.g. add something to a dictionary)
+
+var someStoredProperty: Int = 42 {
+    willSet { newValue is the new value }
+    didSet { oldValue is the old value }
+}
+
+override var inheritedProperty: String {
+  willSet { newValue is the new value }
+  didSet { oldValue is the old value }
+}
+
+var operations: Dictionary<String, Operation> = [ ... ] {
+  willSet { will be executed if an operation is added/removed }
+  didSet { will be executed if an operation is added/removed } 
+}
+
+Lazy Initialization:
+- A lazy property does not get initialized until someone accesses it
+- You can allocate an object, exexcute a closure, or call a method if you want
+- It can be useful to use these when creating a property is expensive (delays
+  creating the property until the property is needed)
+- It can also be useful during initialization (when everything has to be initialized)
+  if, for example, something needs to call a method on self in order to initialize
+  itself (avoid having to go through the process that lazy allows you to defer until
+  you have to go through that process)
   
+
+lazy var brain = CalculatorBrain() // nice if CalculatorBrain used lots of resources
+
+lazy var someProperty: Type = {
+  // construct the value of someProperty here
+  return <the constructed value>
+}()
+
+lazy var myProperty = self.initializeMyProperty()
+
+====================
+
+Arrays:
+=======
+var a = Array<String>()
+... is the same as ...
+var a = [String]() // this appears to be winning the battle of "preferred"
+
+let animals = ["Giraffe", "Cow", "Dog", "Bird"] // inferred to be Array<String>
+
+// This won't work because animals is a constant declared with let:
+// animals.append("Lion")
+
+// And this won't work because the index is out of bounds
+// let animal = animals[4]
+*/
+
+// enumerating an Array (it's a "sequence" just like a CountableRange is)
+for animal in animals {
+  print(animal)
+}
+
+Interesting Array<T> methods which take closures (standard FP functions):
+=========================================================================
+Filter:
+- This creates a new array with any "undesirables" filtered out.
+- The function passed as the argument returns false if an element is undesirable
+filter(includeElement: (T) -> Bool) -> [T]
+
+let oAnimals = animals.filter({$0.range(of: "o") != nil}) // oAnimals = ["Cow", "Dog"]
+let bigNumbers = [2,47,118,5,9].filter({$0 > 20}) // bigNumbers = [47, 118]
+
+Map:
+- Create a new array by transforming each element to something different
+- The thing it is transformed to can be of a different type than what is in the Array
+
+map(transform: (T) -> U) -> [U]
+
+let countified: [Int] = animals.map9{ $0.characters.count }) // [7,3,3,4]
+let stringified: [String] = [1,2,3].map { String($0) } // ["1","2","3"]
+// Note also the trailing closure syntax for stringified, omitting the parentheses
+
+Reduce:
+- Reduce an entire array to a single value
+- reduce(initial: U, combine: (U, T) -> U) -> U
+let concatenatedAnimals = animals.reduce("", +) // "GiraffeCowDogBird"
+let sum: Int = [1,2,3].reduce(0) { $0 + $1 } // adds up the numbers in the Array
+let sum = [1,2,3].reduce(0, +) // same as above, because + is just a function in Swift
+
+====================
+
+Dictionary:
+===========
+var pac12teamRankings = Dictionary<String,Int>()
+... is the same as ...
+var pac12teamRankings = [String:Int]()
+
+pac12teamRankings = ["Arizona":5, "USC":11]
+let ranking = pac12teamRankings["Ohio State"] // ranking is an Int? (would be nil)
+pack12teamRankings["Washington"] = 6
+
+// use a tuple with for-in to enumerate a Dictionary
+for (key, value) in pac12teamRankings {
+  print("Team \(key) is ranked number \(value)")
+}
+
+====================
+
+String:
+The characters in a String
+- A String is made up of Unicodes, but there's also the concept of a Character.
+- A Character is what a human would perceive to be a single lexical character.
+- This is true even if it is made up of multiple Unicodes.
+- For example, café might be 5 Unicodes (the accent might be separate), but 
+  it's 4 Characters.
+- You can access any character (of type Character) in a String using [] notation.
+  But the indexes inside the [] are not Int, they are a type called String.Index.
+  let s: String = "hello" //   hmm, what if we basically wanted s[0] (i.e. the "h")?
+
+let firstIndex: String.Index = s.startIndex //note that firstIndex's type is not an Int
+let firstChar: Character = s[firstIndex]    // firstChar = the Character h
+let secondIndex: String.Index = s.index(after: firstIndex)
+let secondChar: Character = s[secondIndex]  // secondChar = e
+let fifthChar: Character = s[s.index(firstIndex, offsetBy: 4)] // fifthChar = o
+let substring: Substring = s[firstIndex...secondIndex] // substring = "he"
+let finalString = String(substring)
+
+The characters in a String:
+- Even though String is indexable (using []), it's not a collection 
+  or a sequence (like an Array).
+- Only sequences and collections can do things like "for in" or index(of:).
+- Luckily, the "characters" var in String returns a collection of the 
+  String's Characters
+- With it, you can do things like ...
+  for c: Character in s.characters { } // iterate through all Characters in s
+
+  let count = s.characters.count       // how many Characters in s?
+  ... OR in Swift 4 ...
+  let count = s.count
+
+  let firstSpace: String.Index = s.characters.index(of: " ")
+  // a String.Index into the String's characters *matches* a 
+  // String.Index into the String
+
+Note that String is a value type (specifically, a struct):
+- So whether you can modify its characters depends on var versus let.
+let hello = "hello"
+var greeting = "hello"
+// hello += "there" // this is illegal because hello is immutable
+greeting += " there" // greeting, however, is a var and thus is mutable
+print(greeting)
+print(hello)
+
+Of course you can manipulate Strings in much more complicated ways than appending:
+if let firstSpace = greeting.characters.index(of: " ") {
+  // insert(contentsOf:at:) inserts a collection of Characters at the index
+  greeting.insert(contentsOf: " you".characters, at: firstSpace)
+}
+print(greeting) // prints: hello you there
+
+Other String Methods:
+- var endIndex: String.Index // this is never a valid index into the String
+- func hasPrefix(String) -> Bool
+- func hasSuffix(String) -> Bool
+- var localizedCapitalized/Lowercase/Uppercase: String
+- func replaceSubrange(Range<String.Index>, with: String)
+  e.g., s.replaceSubrange(s.startIndex..<s.endIndex, with: "new contents")
+- func components(separatedBy: String) -> [String]
+
+e.g., let array = "1,2,3".components(separatedBy: ",") // array = ["1","2","3"]
+
+*** And much, much more. Check out the documentation for String AND CharacterView ***
+
+====================
+
+Other classes:
+==============
+NSObject:
+- Base class for all Objective-C classes
+- Some advanced features will require you to subclass from NSObject 
+    (and it can't hurt to do so)
+
+NSNumber:
+- Generic number-holding class (i.e., reference type)
+- let n = NSNumber(35.5) or let n: NSNumber = 35.5
+- let intified: Int = n.intValue // also doubleValue, boolValue, etc.
+
+Date:
+- Value type used to find out the date and time right now or to store 
+  past or future dates
+- See also Calendar, DateFormatter, DateComponents
+- If you are displaying a date in your UI, there are localization 
+  ramifications, so check these out!
+
+Data:
+- A value type "bag o' bits". Used to save/restore/transmit raw data 
+  throughout the iOS SDK.
+- Something like the bits of an image. 
+- struct (value type), gets passed around with copy-on-write.
+- will start seeing this in a couple lectures.
+
+====================
+
+Initialization (highlights):
+============================
+When is an init method needed?
+- init methods are not so common because properties can have their 
+  defaults set using =
+- You can also initialize a property by executing a closure
+- Or use lazy instantiation
+- So you only need init when a value can't be set in any of these ways
+- You can have as many init methods in a class or struct as you want
+- Each init will have different arguments, of course
+
+Callers use your init(s) by just using the name of your type and providing 
+the args you want:
+
+var brain = CalculatorBrain()
+var pendingBinaryOperation = PendingBinaryOperation(function: +, firstOperand: 23)
+let textNumber = String(45.2)
+let emptyString = String()
+
+You get some init methods for free
+- Free init() (i.e. an init with no arguments) given to all base classes.
+  A base class has no superclass. However, this only works if all of your
+  vars have default values.
+- If a struct has no initializers, it will get a default one with all 
+  properties as arguments.
+
+struct PendingBinaryOperation {
+  var function: (Double,Double) -> Double
+  var firstOperand: Double
+
+  init(function: (Double,Double) -> Double, firstOperand: Double) {
+    // we get this for free!
+  }
+}
+
+// use of this free initializer somewhere else in our code:
+let pbo = PendingBinaryOperation(function: f, firstOperand: accumulator)
+
+What can you do inside an init?
+- You can set any property's value, even those that already had default values
+- Constant properties (i.e. properties declared with "let") can be set
+- You can call other init methods in your own class or struct using self.init(<args>)
+- In a class, you can of course also call super.init(<args>)
+- But there are some rules for calling inits from other inits in a class ...
+
+What are you *required* to do inside init?
+- By the time any init is done, all properties must have values 
+  (optionals can have the value nil)
+- There are two types of inits in a class: convenience and 
+  designated (i.e. not convenience)
+- A designated init must (and can only) call a designated init that is in
+  its immediate superclass
+- You must initialize all properties introduced by your class *before* 
+  calling a superclass's init
+- You must call a superclass's init *before* you assign a value to an
+  inherited property
+- A convenience init must (and can only) can an init in its own class.
+  The init it calls may be convenience or designated
+- A convenience init must call that init before it can set any 
+  property values
+- The calling of other inits must be complete before you can access
+  properties or invoke methods
+
+Inheriting init:
+- If you do not implement any designated inits, you'll inherit all of 
+  your superclass's designateds.
+- If you override all of your superclass's designated inits, you'll 
+  inherit all its convenience inits
+- If you implement no inits, you'll inherit all of your superclass's inits
+- Any init inherited by these rules qualifies to satisfy any of the rules
+  on the previous slide
+
+Required init
+- A class can mark one or more of its init methods as *required*
+- Any subclass must implement said init methods (though they can be
+  inherited per above rules)
+
+Failable init
+- If an init is declared with a ? after the word init, it returns an Optional
+init?(arg1: Type1, ...) {
+  // might return nil in here (which means the init failed)
+}
+
+Example ...
+let image = UIImage(named: "foo") // image is an Optional UIImage (i.e. UIImage?)
+Usually we would use if-let for these cases ...
+if let image = UIImage(named: "foo") {
+  // image was successfully created
+} else {
+  // couldn't create the image
+}
+
+====================
+
+Any & AnyObject
+===============
+
+Any & AnyObject are special types
+- These types used to be commonly used for compatibility with old Objective-C APIs
+- But not so much anymore in iOS 10 since those old Objective-C APIs have been updated
+- Variables of type Any can hold something of any type (AnyObject holds classes only).
+- Swift is a strongly typed language, though, so you can't invoke a method on an Any
+- You have to convert it into a concrete type first.
+- One of the beauties of Swift is its strong typing, so generally you want to avoid Any
+
+Where will you see it in iOS?
+- Sometimes (rarely) it will be an argument to a function that can take different 
+  sorts of things.
+- Here's a UIViewController method that includes a sender (which can be of any type).
+  func prepare(for segue: UIStoryboardSegue, sender: Any?)
+- The sender is the thing that cause this "seque" (i.e., a move to another MVC)
+  to occur.
+- The sender might be a UIButton or a UITableViewCell or some custom thing in 
+  your code.
+- It's an Optional because it's okay for a segue to happen without a sender 
+  being specified.
+
+Where else will you see it?
+- It could be used to contain an array of things with different types
+  (e.g. [AnyObject]).
+- But in Swift we'd almost certainly use an Array of an enum instead
+  (like in CalculatorBrain).
+- So we'd only do this to be backwards-compatible with some Objective-C API.
+
+- You could also use it to return an object that you don't want the caller
+  to know the type of.
+  e.g. var cookie: Any
+
+How do we use a variable of type Any?
+- We can't usually use it directly (since we don't know what type it really is)
+- Instead, we must convert it to another, known type
+- Conversion is done with the as? keyword in Swift
+  - This conversion might not be possible, so the conversion generates an Optional
+  - You can also check to see if something can be converted with the *is* keyword
+    (true/false)
+  - We almost always use *as?* with *if let* ...
+    let unknown: Any = ... // we can't send unknown a message because it's typeless
+    if let foo = unknown as? MyType {
+      // foo is of type MyType in here
+      // so we can invoke MyType methods or access MyType vars in foo
+      // if unknown was not of type MyType, then we'll never get here
+    }
+
+Casting
+=======
+By the way, casting with as? is not just for Any and AnyObject
+- You can cast any type with as? into any other type that makes sense.
+- Mostly this would be casting an object from one of its superclasses
+  down to a subclass.
+- But it could also be used to cast any type to a protocol it implements
+  (more on this later).
+- Example of "downcasting" from a superclass down to a subclass...
+  let vc: UIViewController = CalculatorViewController()
+- The type of vc is UIViewController (because we explicitly type it to be).
+- And the assignment is legal because a CalculatorViewControll *is* a UIViewController.
+- But we can't say, for example, vc.displayValue, since vc is typed 
+  as a UIViewController.
+
+However, if we cast vc to be a CalculatorViewController, then we can use it...
+if let calcVC = vc as? CalculatorViewController {
+  calcVC.displayValue = 3.1415 // this is okay
+}
+
+====================
+
+UserDefaults:
+=============
+A very lightweight and limited database
+- UserDefaults is essentially a very tiny database that persists between 
+  launchings of your app.
+- Great for things like "settings" and such. Do not use it for anything big!
+What can you store there?
+- You are limited in what you can store in UserDefaults: it only stores
+  *Property List* data.
+- A *Property List* is any combo of Array, Dictionary, String, Date, Data or
+  a number (Int, etc.).
+- This is an old Objective-C API with no type that represents all those, so
+  this API uses Any.
+- If this were a new, Swift-style API, it would almost certainly not use Any
+- (Likely there would be a protocol or some such that those types would implement.)
+
+What does the API look like?
+- It's "core" functionality is simple. It just stores and retrieves 
+  Property Lists by key ...
+- func set(Any?, forKey: String)      // the Any has to be a Property List (or crash)
+- func object(forKey: String) -> Any? // the Any is guaranteed to be a Property List
+
+Reading and Writing
+- You don't usually create one of these databases with UserDefaults()
+- Instead, you use the static (Type) var called standard ...
+  let defaults = UserDefaults.standard
+- Setting a value in the database is easy since the *set* method takes an *Any?*
+  defaults.set(3.1415, forKey: "pi")
+  defaults.set([1,2,3,4,5], forKey: "MyArray") // Array and Int are both Property Lists
+  defaults.set(nil, forKey: "Some Setting") // removes any data at that key
+- You can pass anything as the first argument as long as it's a combo of 
+  Property List types.
+
+UserDefaults also has convenience API for getting many of the Property List types.
+- func double(forKey: String) -> Double
+- func array(forKey: String) -> [Any]? // returns nil if non-Array at that key
+- func dictionary(forKey: String) -> [String:Any]? // note that 
+                                                   // keys in return are Strings
+- The any in the returned values will, of course, be a Property List type.
+
+Saving the database
+- Your changes will be occasionally autosaved.
+- But you can force them to be saved at any time with *synchronize* ...
+  if !defaults.synchronize() { // failed but not clear what you can do about it }
+- (it's not "free" to synchronize, but it's not that expensive either)
+
+====================
+
+Assertions:
+===========
+
+Debugging Aid
+- Intentionally crash your program if some condition is not true (and give a message)
+  assert(() -> Bool, "message")
+- The function argument is an "autoclosure" however, so you don't need the { }
+- e.g. assert(validation() != nil, "the validation function returned nil")
+  Will crash if validation() returns nil (because we are asserting that validation()
+  does not return nil)
+- The "validation() != nil" part could be any code you want
+- When building for release (to the AppStore or whatever), asserts are 
+  ignored completely.
+
+Lab that's not on iTunes U: 
+- Source Code Management:
+  Read this: https://www.raywenderlich.com/153084/use-git-source-control-xcode-8
+Next few lectures:
+- Views, Gestures, Multiple MVCs
+
+
+Things to review:
+=================
+*** Lazy initialization
+*** String documentation / CharacterView documentation
+*** https://www.raywenderlich.com/153084/use-git-source-control-xcode-8
