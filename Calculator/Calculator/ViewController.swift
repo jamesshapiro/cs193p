@@ -72,6 +72,12 @@ class ViewController: UIViewController {
             displayValue = result
             argumentsValue = brain.descriptionComputed
         }
+        if sender.currentTitle! == "C" {
+            displayValue = 0
+            argumentsValue = "Hail to the Redskins"
+            userIsInTheMiddleOfTyping = false
+            userHasAlreadyTypedADecimalPoint = false
+        }
     }
 }
 

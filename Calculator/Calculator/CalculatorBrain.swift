@@ -21,6 +21,11 @@ struct CalculatorBrain {
     private var resultIsPending = false
     private var description = ""
     
+    private class Accumulater {
+        var accumulator: Double?
+        var descrip: String?
+    }
+    
     var descriptionComputed: String {
         if let accumdec = accumulater.descrip {
             if resultIsPending {
@@ -43,29 +48,6 @@ struct CalculatorBrain {
     
     func print_descrip() {
         print(descriptionComputed)
-        /*if let accumdec = accumulater.descrip {
-            if resultIsPending {
-                let str = description + accumdec +  " ..."
-                print(str.condensedWhitespace)
-            } else {
-                let str = description + accumdec +  " ="
-                print(str.condensedWhitespace)
-            }
-        } else {
-            if resultIsPending {
-                let str = description +  " ..."
-                print(str.condensedWhitespace)
-            } else {
-                let str = description + " ="
-                print(str.condensedWhitespace)
-            }
-        }*/
-    }
-    
-    private class Accumulater {
-        var accumulator: Double?
-        var descrip: String?
-        
     }
     
     private enum Operation {
@@ -75,27 +57,19 @@ struct CalculatorBrain {
         case equals
     }
     
-    private enum DescribeOperation {
-        case constant(Double)
-        case unaryOperation((Double) -> Double)
-        case binaryOperation((String,String) -> String)
-        case equals
-    }
-    
     private var operations: Dictionary<String,Operation> = [
         "π" : Operation.constant(Double.pi),
         "e" : Operation.constant(M_E),
         "√" : Operation.unaryOperation(sqrt),
         "cos" : Operation.unaryOperation(cos),
-        "±" : Operation.unaryOperation({ -$0 }),
-        "×" : Operation.binaryOperation({ $0 * $1 }),
-        "÷" : Operation.binaryOperation({ $0 / $1 }),
-        "+" : Operation.binaryOperation({ $0 + $1 }),
-        "−" : Operation.binaryOperation({ $0 - $1 }),
-        "x²" : Operation.unaryOperation({ $0 * $0 }),
-        "lg" : Operation.unaryOperation({ log2($0) }),
+        "±" : Operation.unaryOperation(-),
+        "×" : Operation.binaryOperation(*),
+        "÷" : Operation.binaryOperation(/),
+        "+" : Operation.binaryOperation(+),
+        "−" : Operation.binaryOperation(-),
+        "lg" : Operation.unaryOperation(log2),
         "eˣ" : Operation.unaryOperation({ pow(M_E, $0) }),
-        "1/x" : Operation.unaryOperation({ 1.0 / $0 }),
+        "ln" : Operation.unaryOperation(log),
         "=" : Operation.equals
     ]
     
@@ -108,8 +82,8 @@ struct CalculatorBrain {
             case .unaryOperation(let function):
                 if accumulater.accumulator != nil {
                     var nsymbol = symbol
-                    if symbol == "1/x" {
-                        nsymbol = "1/"
+                    if symbol == "eˣ" {
+                        nsymbol = "e^"
                     }
                     accumulater.accumulator = function(accumulater.accumulator!)
                     if resultIsPending {
@@ -143,6 +117,13 @@ struct CalculatorBrain {
                 performPendingBinaryOperation()
                 print_descrip()
             }
+        }
+        if symbol == "C" {
+            accumulater.accumulator = nil
+            accumulater.descrip = nil
+            pendingBinaryOperation = nil
+            resultIsPending = false
+            description = ""
         }
     }
     
