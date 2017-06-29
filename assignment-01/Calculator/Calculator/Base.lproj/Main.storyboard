@@ -228,7 +228,7 @@
                                                         <rect key="frame" x="0.0" y="0.0" width="49.5" height="69"/>
                                                         <color key="backgroundColor" red="0.52549019610000003" green="0.14901960780000001" blue="0.015686274510000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                        <state key="normal" title="eˣ">
+                                                        <state key="normal" title="sin">
                                                             <color key="titleColor" red="1" green="0.80968087909999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         </state>
                                                         <connections>
