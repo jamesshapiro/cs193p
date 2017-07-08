@@ -8,19 +8,15 @@
 
 import UIKit
 
-private class MyNumberFormatterWrapper: NumberFormatter {
-    override init() {
-        super.init()
-        self.maximumFractionDigits = 6
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+private extension NumberFormatter {
+    convenience init(maximumFractionDigits: Int) {
+        self.init()
+        self.maximumFractionDigits = maximumFractionDigits
     }
 }
 
 class ViewController: UIViewController {
-    private let numberFormatter = MyNumberFormatterWrapper()
+    private let numberFormatter = NumberFormatter(maximumFractionDigits: 6)
     @IBOutlet weak var display: UILabel!
     @IBOutlet weak var arguments: UILabel!
     

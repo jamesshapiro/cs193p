@@ -8,6 +8,8 @@
 
 import Foundation
 
+/// Extracts the non-empty, non-whitespace components of a `String`
+/// into an array of Strings
 private extension String {
     var arguments: [String] {
         let components = self.components(separatedBy: NSCharacterSet.whitespacesAndNewlines)
@@ -15,15 +17,24 @@ private extension String {
     }
 }
 
+/// Handles all numerical computations for the Calculator app
 struct CalculatorBrain {
+    /// Stores the numerical result of the computations so far
+    /// and a String record of the most recent operations.
     private var accumulator: (double: Double?, string: String?) = (nil, nil)
+    /// Signals whether the Calculator Brain is in the middle
+    /// of a binary operation.
     private var resultIsPending = false
+    /// Stores a history of the operands and operations that
+    /// have been entered so far.
     private var argumentsEntered = ""
     
     private func print_descrip() {
         print(description)
     }
     
+    /// The different types of mathematical operations that the
+    /// Calculator can perform.
     private enum Operation {
         case constant(Double)
         case unaryOperation((Double) -> Double)
@@ -31,6 +42,8 @@ struct CalculatorBrain {
         case equals
     }
     
+    /// A map from symbols for the supported operations to
+    /// the supported operations themselves.
     private var operations: Dictionary<String,Operation> = [
         "π" : Operation.constant(Double.pi),
         "e" : Operation.constant(M_E),
