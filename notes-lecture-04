@@ -1,0 +1,16 @@
+View:
+=====
+-subclass of UIView
+-for drawing
+-for handling touch events
+-hierarchical
+ + a view has at most one superview (var superview: UIView?)
+ + but any number of subviews var (var subviews[UIView])
+ + subviews later in the array are layered on top of those earlier
+ + a view can clip subviews to its own bounds (default is not to)
+ + example: in Calculator, we have stacks on stacks of buttons.
+   The high-level stack containing everything is the superview
+   of all of the other views.
+ + the hierarchy is most often constructed in InterfaceBuilder
+   in Xcode, graphically. Even custome views are usually added to
+   the view hierarchy using Xcode.
