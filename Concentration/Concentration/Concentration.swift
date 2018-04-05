@@ -11,11 +11,14 @@ import GameKit
 
 class Concentration {
     var cards = [Card]()
+    var numberOfCardsMatched = 0
     var numFlips = 0
     var score = 0
     let wrongCardDeduction = 1
     var indexOfOneAndOnlyFaceUpCardEligibleForMatching: Int?
     var previouslyFlippedCards = Set<Int>()
+    var now = Date()
+    var timeBonus = 32
     
     func chooseCard(at index: Int) {
         if !cards[index].isMatched {
@@ -30,6 +33,13 @@ class Concentration {
                     cards[matchIndex].isMatched = true
                     cards[index].isMatched = true
                     score += 2
+                    numberOfCardsMatched += 2
+                    if numberOfCardsMatched == cards.count {
+                        let timePenalty = -Int(now.timeIntervalSinceNow)
+                        score += max(0, timeBonus - timePenalty)
+                        cards[matchIndex].isFaceUp = false
+                        cards[index].isFaceUp = false
+                    }
                 } else {
                     // deduct one point for every previously flipped card involved in the non-match
                     var penalty = 0
@@ -43,7 +53,9 @@ class Concentration {
                 }
                 previouslyFlippedCards.insert(index)
                 previouslyFlippedCards.insert(matchIndex)
-                cards[index].isFaceUp = true
+                if numberOfCardsMatched < cards.count {
+                    cards[index].isFaceUp = true
+                }
                 indexOfOneAndOnlyFaceUpCardEligibleForMatching = nil
             } else { // either no cards or 2 cards are face up
                 // no-op if you select a card that is already face-up.

@@ -10,9 +10,7 @@ import UIKit
 
 class ViewController: UIViewController
 {
-    // TODO: fix variable names (esp for themes)
     // TODO: implement a timer-based bonus
-    // TODO: use viewdidload, etc.
     
     override func viewDidLoad() {
         super.viewDidLoad()
