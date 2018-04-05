@@ -20,13 +20,18 @@ class ViewController: UIViewController
     var emojis: [String]! = nil
     var game: Concentration! = nil
     var cardBackgroundColor: UIColor! = nil
+
+    var numberOfPairsOfCards: Int {
+        return (cardButtons.count + 1) / 2
+    }
+    
     
     @IBAction func startNewGame() {
-        let themeAndEmojis = getThemeAndEmojis()
-        self.view.backgroundColor = themeAndEmojis.0
-        cardBackgroundColor = themeAndEmojis.1
-        emojis = themeAndEmojis.2
-        game = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
+        let (backgroundColor, cardColor, emojiSet) = getThemeAndEmojis()
+        self.view.backgroundColor = backgroundColor
+        cardBackgroundColor = cardColor
+        emojis = emojiSet
+        game = Concentration(numberOfPairsOfCards: numberOfPairsOfCards)
         updateViewFromModel()
     }
 
@@ -70,7 +75,6 @@ class ViewController: UIViewController
         themeEmojiTuples += [(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1),#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),["⌚️","⏱","⏲","⏰","🕰","⌛️","⏳","📅"])]
         let randomIndex = Int(arc4random_uniform(UInt32(themeEmojiTuples.count)))
         return themeEmojiTuples[randomIndex]
-        
     }
     
     var emoji = [Int:String]()

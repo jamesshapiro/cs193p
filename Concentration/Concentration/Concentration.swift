@@ -14,62 +14,62 @@ class Concentration {
     var numberOfCardsMatched = 0
     var numFlips = 0
     var score = 0
-    let wrongCardDeduction = 1
-    var indexOfOneAndOnlyFaceUpCardEligibleForMatching: Int?
+    var indexOfOneAndOnlyFaceUpCard: Int? {
+        get {
+            let faceUps = cards.indices.filter { cards[$0].isFaceUp }
+            if faceUps.count == 1 {
+                return faceUps[0]
+            }
+            return nil
+        }
+        set {
+            for index in cards.indices {
+                cards[index].isFaceUp = (index == newValue)
+            }
+        }
+    }
+    
     var previouslyFlippedCards = Set<Int>()
     var now = Date()
     var timeBonus = 32
     
     func chooseCard(at index: Int) {
-        if !cards[index].isMatched {
-            // if exactly one card is already face up
-            if let matchIndex = indexOfOneAndOnlyFaceUpCardEligibleForMatching {
-                // no-op if you select the card that is already face-up
-                if matchIndex == index {
-                    return
-                }
-                // check if cards match
-                if cards[matchIndex].identifier == cards[index].identifier {
-                    cards[matchIndex].isMatched = true
-                    cards[index].isMatched = true
-                    score += 2
-                    numberOfCardsMatched += 2
-                    if numberOfCardsMatched == cards.count {
-                        let timePenalty = -Int(now.timeIntervalSinceNow)
-                        score += max(0, timeBonus - timePenalty)
-                        cards[matchIndex].isFaceUp = false
-                        cards[index].isFaceUp = false
-                    }
-                } else {
-                    // deduct one point for every previously flipped card involved in the non-match
-                    var penalty = 0
-                    if previouslyFlippedCards.contains(index) {
-                        penalty += wrongCardDeduction
-                    }
-                    if previouslyFlippedCards.contains(matchIndex) {
-                        penalty += wrongCardDeduction
-                    }
-                    score -= penalty
-                }
-                previouslyFlippedCards.insert(index)
-                previouslyFlippedCards.insert(matchIndex)
-                if numberOfCardsMatched < cards.count {
-                    cards[index].isFaceUp = true
-                }
-                indexOfOneAndOnlyFaceUpCardEligibleForMatching = nil
-            } else { // either no cards or 2 cards are face up
-                // no-op if you select a card that is already face-up.
-                if cards[index].isFaceUp {
-                    return
-                }
-                for flipDownIndex in cards.indices {
-                    cards[flipDownIndex].isFaceUp = false
-                }
-                cards[index].isFaceUp = true
-                indexOfOneAndOnlyFaceUpCardEligibleForMatching = index
-            }
-            numFlips += 1
+        // player may not select a card that has already been matched (hence removed from the game)
+        guard !cards[index].isMatched else {
+            return
         }
+        // player may not select a card that is already face up
+        guard !cards[index].isFaceUp else {
+            return
+        }
+
+        // if exactly one card is already face up
+        if let matchIndex = indexOfOneAndOnlyFaceUpCard {
+            // check if cards match
+            if cards[matchIndex].identifier == cards[index].identifier {
+                cards[matchIndex].isMatched = true
+                cards[index].isMatched = true
+                score += 2
+                numberOfCardsMatched += 2
+                if numberOfCardsMatched == cards.count {
+                    let timePenalty = -1 * Int(now.timeIntervalSinceNow)
+                    score += max(0, timeBonus - timePenalty)
+                    cards[matchIndex].isFaceUp = false
+                    cards[index].isFaceUp = false
+                }
+            } else {
+                // deduct one point for every previously flipped card involved in the non-match
+                score -= [index, matchIndex].filter{ previouslyFlippedCards.contains($0) }.count
+            }
+            previouslyFlippedCards.insert(index)
+            previouslyFlippedCards.insert(matchIndex)
+            if numberOfCardsMatched < cards.count {
+                cards[index].isFaceUp = true
+            }
+        } else { // either no cards or 2 cards are face up
+            indexOfOneAndOnlyFaceUpCard = index
+        }
+        numFlips += 1
     }
     
     init(numberOfPairsOfCards: Int) {
