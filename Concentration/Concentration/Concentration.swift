@@ -13,42 +13,50 @@ class Concentration {
     var cards = [Card]()
     var numFlips = 0
     var score = 0
-    var indexOfOneAndOnlyFaceUpCard: Int?
+    let wrongCardDeduction = 1
+    var indexOfOneAndOnlyFaceUpCardEligibleForMatching: Int?
     var previouslyFlippedCards = Set<Int>()
     
     func chooseCard(at index: Int) {
         if !cards[index].isMatched {
-            numFlips += 1
-            // one card is already face up, and the selected card is not the face-up card
-            if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
+            // if exactly one card is already face up
+            if let matchIndex = indexOfOneAndOnlyFaceUpCardEligibleForMatching {
+                // no-op if you select the card that is already face-up
+                if matchIndex == index {
+                    return
+                }
                 // check if cards match
                 if cards[matchIndex].identifier == cards[index].identifier {
                     cards[matchIndex].isMatched = true
                     cards[index].isMatched = true
                     score += 2
                 } else {
+                    // deduct one point for every previously flipped card involved in the non-match
                     var penalty = 0
                     if previouslyFlippedCards.contains(index) {
-                        penalty += 1
+                        penalty += wrongCardDeduction
                     }
                     if previouslyFlippedCards.contains(matchIndex) {
-                        penalty += 1
+                        penalty += wrongCardDeduction
                     }
                     score -= penalty
-                    
                 }
                 previouslyFlippedCards.insert(index)
                 previouslyFlippedCards.insert(matchIndex)
                 cards[index].isFaceUp = true
-                indexOfOneAndOnlyFaceUpCard = nil
-            } else {
-                // either no cards or 2 cards are face up
+                indexOfOneAndOnlyFaceUpCardEligibleForMatching = nil
+            } else { // either no cards or 2 cards are face up
+                // no-op if you select a card that is already face-up.
+                if cards[index].isFaceUp {
+                    return
+                }
                 for flipDownIndex in cards.indices {
                     cards[flipDownIndex].isFaceUp = false
                 }
                 cards[index].isFaceUp = true
-                indexOfOneAndOnlyFaceUpCard = index
+                indexOfOneAndOnlyFaceUpCardEligibleForMatching = index
             }
+            numFlips += 1
         }
     }
     
@@ -59,5 +67,4 @@ class Concentration {
         }
         cards = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: cards) as! [Card]
     }
-    // TODO: Shuffle the cards
 }
