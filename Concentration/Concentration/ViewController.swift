@@ -10,6 +10,10 @@ import UIKit
 
 class ViewController: UIViewController
 {
+    // TODO: fix variable names (esp for themes
+    // TODO: implement a timer-based bonus
+    
+    
     lazy var game: Concentration = Concentration(numberOfPairsOfCards: (cardButtons.count + 1) / 2)
     
     @IBAction func startNewGame() {
