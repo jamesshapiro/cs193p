@@ -11,10 +11,10 @@ import GameKit
 
 class Concentration {
     var cards = [Card]()
-    var numberOfCardsMatched = 0
+    private var numberOfCardsMatched = 0
     var numFlips = 0
     var score = 0
-    var indexOfOneAndOnlyFaceUpCard: Int? {
+    private var indexOfOneAndOnlyFaceUpCard: Int? {
         get {
             let faceUps = cards.indices.filter { cards[$0].isFaceUp }
             if faceUps.count == 1 {
@@ -34,6 +34,7 @@ class Concentration {
     var timeBonus = 32
     
     func chooseCard(at index: Int) {
+        assert(cards.indices.contains(index), "Concentration.chooseCard(at: \(index)): chosen index not in the cards")
         // player may not select a card that has already been matched (hence removed from the game)
         guard !cards[index].isMatched else {
             return
@@ -73,6 +74,7 @@ class Concentration {
     }
     
     init(numberOfPairsOfCards: Int) {
+        assert(numberOfPairsOfCards > 0, "Concentration.init(numberOfPairsOfCards: \(numberOfPairsOfCards)): number of pairs of cards must be positive")
         for _ in 0..<numberOfPairsOfCards {
             let card = Card()
             cards += [card, card]
