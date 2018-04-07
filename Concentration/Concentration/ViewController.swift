@@ -77,14 +77,15 @@ class ViewController: UIViewController
         return themeEmojiTuples[randomIndex]
     }
     
-    private var emoji = [Int:String]()
+    private var emoji = [Card:String]()
     
     private func emoji(for card: Card) -> String {
+        print(card.hashValue)
         
-        if emoji[card.identifier] == nil, emojis.count > 0 {
-            emoji[card.identifier] = emojis.remove(at: emojis.count.arc4random)
+        if emoji[card] == nil, emojis.count > 0 {
+            emoji[card] = emojis.remove(at: emojis.count.arc4random)
         }
-        return emoji[card.identifier] ?? "?"
+        return emoji[card] ?? "?"
     }
 }
 

@@ -9,7 +9,7 @@
 import Foundation
 import GameKit
 
-class Concentration {
+struct Concentration {
     var cards = [Card]()
     private var numberOfCardsMatched = 0
     var numFlips = 0
@@ -33,7 +33,7 @@ class Concentration {
     var now = Date()
     var timeBonus = 32
     
-    func chooseCard(at index: Int) {
+    mutating func chooseCard(at index: Int) {
         assert(cards.indices.contains(index), "Concentration.chooseCard(at: \(index)): chosen index not in the cards")
         // player may not select a card that has already been matched (hence removed from the game)
         guard !cards[index].isMatched else {
@@ -47,7 +47,7 @@ class Concentration {
         // if exactly one card is already face up
         if let matchIndex = indexOfOneAndOnlyFaceUpCard {
             // check if cards match
-            if cards[matchIndex].identifier == cards[index].identifier {
+            if cards[matchIndex] == cards[index] {
                 cards[matchIndex].isMatched = true
                 cards[index].isMatched = true
                 score += 2
