@@ -10,14 +10,12 @@ import UIKit
 
 class ViewController: UIViewController
 {
-    // TODO: implement a timer-based bonus
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         startNewGame()
     }
     
-    var emojis: [String]! = nil
+    var emojis: String! = nil
     var cardBackgroundColor: UIColor! = nil
     private var game: Concentration! = nil
 
@@ -61,18 +59,24 @@ class ViewController: UIViewController
                 button.backgroundColor = card.isMatched ? #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 0) : cardBackgroundColor
             }
         }
-        flipCountLabel.text = "Flips: \(game.numFlips)"
+        let attributes: [NSAttributedStringKey: Any] = [
+            .strokeWidth : 5.0,
+            .strokeColor : #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+        ]
+        let attributedString = NSAttributedString(string: "Flips: \(game.numFlips)", attributes: attributes)
+        
+        flipCountLabel.attributedText = attributedString
         scoreLabel.text = "Score: \(game.score)"
     }
     
-    private func getThemeAndEmojis() -> (UIColor, UIColor, [String]) {
-        var themeEmojiTuples = [(UIColor, UIColor, [String])]()
-        themeEmojiTuples += [(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1),#colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1),["🦇","😱","🙀","😈","🎃","👻","🍭","🍬","🍎"])]
-        themeEmojiTuples += [(#colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1),#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1),["🍆","🌶","🥐","🥕","🥖","🌭","🥑","🥦"])]
-        themeEmojiTuples += [(#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1),#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),["⚽️","🏀","🏈","⚾️","🎾","🏐","🏉","🏓"])]
-        themeEmojiTuples += [(#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1),#colorLiteral(red: 0.3098039329, green: 0.2039215714, blue: 0.03921568766, alpha: 1),["🐸","🦊","🐰","🐨","🐶","🐵","🦁","🐷"])]
-        themeEmojiTuples += [(#colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1),#colorLiteral(red: 0.0329692848, green: 0.1491458118, blue: 0.9773867726, alpha: 1),["🇧🇧","🇧🇸","🇦🇿","🇻🇬","🇬🇷","🇯🇵","🇿🇦","🇺🇸"])]
-        themeEmojiTuples += [(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1),#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),["⌚️","⏱","⏲","⏰","🕰","⌛️","⏳","📅"])]
+    private func getThemeAndEmojis() -> (UIColor, UIColor, String) {
+        var themeEmojiTuples = [(UIColor, UIColor, String)]()
+        themeEmojiTuples += [(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1),#colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1),"🦇😱🙀😈🎃👻🍭🍬🍎")]
+        themeEmojiTuples += [(#colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1),#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1),"🍆🌶🥐🥕🥖🌭🥑🥦")]
+        themeEmojiTuples += [(#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1),#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),"⚽️🏀🏈⚾️🎾🏐🏉🏓")]
+        themeEmojiTuples += [(#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1),#colorLiteral(red: 0.3098039329, green: 0.2039215714, blue: 0.03921568766, alpha: 1),"🐸🦊🐰🐨🐶🐵🦁🐷")]
+        themeEmojiTuples += [(#colorLiteral(red: 0.8078431487, green: 0.02745098062, blue: 0.3333333433, alpha: 1),#colorLiteral(red: 0.0329692848, green: 0.1491458118, blue: 0.9773867726, alpha: 1),"🇧🇧🇧🇸🇦🇿🇻🇬🇬🇷🇯🇵🇿🇦🇺🇸")]
+        themeEmojiTuples += [(#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1),#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1),"⌚️⏱⏲⏰🕰⌛️⏳📅")]
         let randomIndex = Int(arc4random_uniform(UInt32(themeEmojiTuples.count)))
         return themeEmojiTuples[randomIndex]
     }
@@ -80,11 +84,10 @@ class ViewController: UIViewController
     private var emoji = [Card:String]()
     
     private func emoji(for card: Card) -> String {
-        print(card.hashValue)
-        
         if emoji[card] == nil, emojis.count > 0 {
-            emoji[card] = emojis.remove(at: emojis.count.arc4random)
-        }
+            let randomStringIndex = emojis.index(emojis.startIndex, offsetBy: emojis.count.arc4random)
+            emoji[card] = String(emojis.remove(at: randomStringIndex))
+            }
         return emoji[card] ?? "?"
     }
 }

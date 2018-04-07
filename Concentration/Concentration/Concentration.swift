@@ -17,10 +17,7 @@ struct Concentration {
     private var indexOfOneAndOnlyFaceUpCard: Int? {
         get {
             let faceUps = cards.indices.filter { cards[$0].isFaceUp }
-            if faceUps.count == 1 {
-                return faceUps[0]
-            }
-            return nil
+            return faceUps.count == 1 ? faceUps[0] : nil
         }
         set {
             for index in cards.indices {
