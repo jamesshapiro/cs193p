@@ -16,8 +16,7 @@ struct Concentration {
     var score = 0
     private var indexOfOneAndOnlyFaceUpCard: Int? {
         get {
-            let faceUps = cards.indices.filter { cards[$0].isFaceUp }
-            return faceUps.count == 1 ? faceUps[0] : nil
+            return cards.indices.filter { cards[$0].isFaceUp }.oneAndOnly
         }
         set {
             for index in cards.indices {
@@ -77,5 +76,11 @@ struct Concentration {
             cards += [card, card]
         }
         cards = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: cards) as! [Card]
+    }
+}
+
+extension Collection {
+    var oneAndOnly: Element? {
+        return count == 1 ? first : nil
     }
 }
