@@ -12,6 +12,8 @@
 		B29A4E68207ACE43005AC670 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B29A4E66207ACE43005AC670 /* Main.storyboard */; };
 		B29A4E6A207ACE45005AC670 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B29A4E69207ACE45005AC670 /* Assets.xcassets */; };
 		B29A4E6D207ACE45005AC670 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B29A4E6B207ACE45005AC670 /* LaunchScreen.storyboard */; };
+		B29A4E75207AD717005AC670 /* PlayingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29A4E74207AD717005AC670 /* PlayingCard.swift */; };
+		B2BE6B3B207AE8C900EADA54 /* PlayingCardDeck.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BE6B3A207AE8C900EADA54 /* PlayingCardDeck.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +24,8 @@
 		B29A4E69207ACE45005AC670 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B29A4E6C207ACE45005AC670 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B29A4E6E207ACE45005AC670 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B29A4E74207AD717005AC670 /* PlayingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingCard.swift; sourceTree = "<group>"; };
+		B2BE6B3A207AE8C900EADA54 /* PlayingCardDeck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingCardDeck.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +61,8 @@
 				B29A4E62207ACE43005AC670 /* AppDelegate.swift */,
 				B29A4E64207ACE43005AC670 /* ViewController.swift */,
 				B29A4E66207ACE43005AC670 /* Main.storyboard */,
+				B29A4E74207AD717005AC670 /* PlayingCard.swift */,
+				B2BE6B3A207AE8C900EADA54 /* PlayingCardDeck.swift */,
 				B29A4E69207ACE45005AC670 /* Assets.xcassets */,
 				B29A4E6B207ACE45005AC670 /* LaunchScreen.storyboard */,
 				B29A4E6E207ACE45005AC670 /* Info.plist */,
@@ -136,6 +142,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B29A4E65207ACE43005AC670 /* ViewController.swift in Sources */,
+				B2BE6B3B207AE8C900EADA54 /* PlayingCardDeck.swift in Sources */,
+				B29A4E75207AD717005AC670 /* PlayingCard.swift in Sources */,
 				B29A4E63207ACE43005AC670 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -281,7 +289,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = RYBW2378JP;
+				DEVELOPMENT_TEAM = WRAK827V3Y;
 				INFOPLIST_FILE = SetGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -299,7 +307,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = RYBW2378JP;
+				DEVELOPMENT_TEAM = WRAK827V3Y;
 				INFOPLIST_FILE = SetGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
