@@ -11,13 +11,13 @@ import Foundation
 struct PlayingCard {
     var shape: Shape
     var fill: Fill
-    var pipCount: PipCount
+    var pipCount: Int
     var color: CardColor
     
     enum Shape {
-        case shape1 // triangle = "▲"
-        case shape2 // circle = "●"
-        case shape3 // square = "■"
+        case shape1
+        case shape2
+        case shape3
         
         static var all = [Shape.shape1, .shape2, .shape3]
     }
@@ -30,13 +30,7 @@ struct PlayingCard {
         static var all = [Fill.texture1, .texture2, .texture3]
     }
     
-    enum PipCount: Int {
-        case one = 1
-        case two
-        case three
-        
-        static var all = [PipCount.one, .two, .three]
-    }
+    static var pipCounts = [1, 2, 3]
     
     enum CardColor: Int {
         case color1

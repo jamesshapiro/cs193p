@@ -10,125 +10,136 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    
     var deck: PlayingCardDeck! = nil
-    var numSelected = 0
+    var numShown = 0
     var selected = [UIButton]()
-
-    @IBOutlet var cardButtons: [UIButton]!
     
-    @IBOutlet weak var dealThree: UIButton!
+    @IBOutlet var cardButtons: [UIButton]!
+    @IBOutlet weak var score: UILabel!
+    @IBAction func startNewGame() {
+        numShown = 0
+        selected = [UIButton]()
+        deck = PlayingCardDeck()
+        cardButtons.forEach { $0.isHidden = true }
+        cardButtons.forEach { $0.setTitle(nil, for: UIControlState.normal) }
+        for _ in 0..<4 {
+            dealThree()
+        }
+        updateViewFromModel(flipSelected: false, selectedIndices: [])
+    }
+    
+    func replaceIfMatching() {
+        if selected.count == 3 {
+            let cardNumbers = selected.map { cardButtons.index(of: $0)! }
+            if deck.cardsFormASet(indices: cardNumbers) {
+                updateViewFromModel(flipSelected: true, selectedIndices: cardNumbers)
+            }
+        }
+    }
+    
+    @IBAction func dealThree() {
+        let numSelected = selected.count
+        replaceIfMatching()
+        if numSelected > selected.count {
+            return
+        }
+        if numShown < 24 {
+            updateViewFromModel(flipSelected: true, selectedIndices: Array(numShown..<numShown+3))
+            numShown += 3
+        }
+    }
     
     @IBAction func touchCard(_ sender: UIButton) {
-        if selected.count < 3  {
-            if selected.contains(sender) {
-                sender.layer.borderColor = UIColor.gray.cgColor
+        if selected.contains(sender) {
+            if selected.count < 3 {
                 selected.remove(at: selected.index(of: sender)!)
-            } else {
-                sender.layer.borderColor = UIColor.blue.cgColor
-                selected.append(sender)
             }
-            let cardNumbers = selected.map {cardButtons.index(of: $0)! }
-            if selected.count == 3 {
-                if deck.checkIfSetAndReplace(indices: cardNumbers) {
-                    selected.forEach { $0.layer.borderColor = UIColor.green.cgColor }
-                } else {
-                    selected.forEach { $0.layer.borderColor = UIColor.red.cgColor }
-                }
-            }
-            return
+        } else if selected.count < 3 {
+            selected.append(sender)
+        } else {
+            replaceIfMatching()
+            selected = [sender]
         }
-        guard !selected.contains(sender) else {
-            return
-        }
-        let cardNumbers = selected.map({cardButtons.index(of: $0)!})
-        let isSet = deck.checkIfSetAndReplace(indices: cardNumbers)
-        print(isSet)
-        for c in selected {
-            c.layer.borderColor = UIColor.gray.cgColor
-        }
-        selected = [UIButton]()
-        
-        
-//        if let cardNumber = cardButtons.index(of: sender) {
-//            game.chooseCard(at: cardNumber)
-//            updateViewFromModel()
-//        } else {
-//            print("chosen card was not in cardButtons")
-//        }
-        
+        updateViewFromModel(flipSelected: false, selectedIndices: [])
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        deck = PlayingCardDeck()
-        updateViewFromModel()
+        startNewGame()
     }
     
     func getCardFace(card: PlayingCard) -> NSAttributedString {
+        // TODO: use rawValues to index into an array of options instead.
         var attributes = [NSAttributedStringKey: Any]()
         var buttonText = ""
         var color: UIColor! = nil
+        
         switch card.shape {
-        case .shape1:
-            buttonText = "▲"
-        case .shape2:
-            buttonText = "●"
-        case .shape3:
-            buttonText = "■"
+        case .shape1: buttonText = "▲"
+        case .shape2: buttonText = "●"
+        case .shape3: buttonText = "■"
         }
-        buttonText = String(repeating: buttonText, count: card.pipCount.rawValue)
+        
+        buttonText = String(repeating: buttonText, count: card.pipCount)
         
         switch card.color {
-        case .color1:
-            color = UIColor.red
-        case .color2:
-            color = UIColor.green
-        case .color3:
-            color = UIColor.blue
+        case .color1: color = UIColor.red
+        case .color2: color = UIColor.green
+        case .color3: color = UIColor.blue
         }
         
-        attributes[.strokeWidth] = 5
+        attributes[.strokeWidth] = -5
+        attributes[.foregroundColor] = color.withAlphaComponent(1.0)
         switch card.fill {
         case .texture1:
-            attributes[.foregroundColor] = color.withAlphaComponent(1.0)
             attributes[.strokeWidth] = 5
         case .texture2:
             attributes[.foregroundColor] = color.withAlphaComponent(0.15)
-            attributes[.strokeWidth] = -5
         case .texture3:
-            attributes[.foregroundColor] = color.withAlphaComponent(1.0)
-            attributes[.strokeWidth] = -5
+            break
         }
         
         let attributedString = NSAttributedString(string: buttonText, attributes: attributes)
-        
-//        let attributes: [NSAttributedStringKey: Any] = [
-//            .strokeWidth : 5.0,
-//            .strokeColor : #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
-//        ]
-//        let attributedString = NSAttributedString(string: "Flips: \(game.numFlips)", attributes: attributes)
-//        flipCountLabel.attributedText = attributedString
-        
         return attributedString
     }
     
-    private func updateViewFromModel() {
-        let cardSlotsFlipped = deck.cardSlotsFlipped
-        for index in cardButtons.indices {
-            let button = cardButtons[index]
-            button.layer.borderWidth = 3.0
-            button.layer.borderColor = UIColor.gray.cgColor
-            button.layer.cornerRadius = 4.0
-            if index < cardSlotsFlipped {
-                let card = deck.cards[index]
+    private func updateViewFromModel(flipSelected: Bool, selectedIndices: [Int]) {
+        if flipSelected {
+            guard deck.cardsFlippedSoFar < deck.cards.count else {
+                selectedIndices.forEach { cardButtons[$0].isHidden = true }
+                return
+            }
+            for index in selectedIndices {
+                let button = cardButtons[index]
+                let card = deck.getNextCard(forIndex: index)
                 button.setAttributedTitle(getCardFace(card: card), for: UIControlState.normal)
-            } else {
-                button.isHidden = true
+                button.layer.borderWidth = 3.0
+                button.layer.cornerRadius = 8.0
+                button.layer.borderColor = UIColor.gray.cgColor
+                button.isHidden = false
+            }
+            selected = [UIButton]()
+            return
+        }
+        
+        for index in cardButtons[..<numShown].indices {
+            if !selected.contains(cardButtons[index]) {
+                cardButtons[index].layer.borderColor = UIColor.gray.cgColor
             }
         }
+        if selected.count < 3 {
+            selected.forEach { $0.layer.borderColor = UIColor.blue.cgColor }
+        } else if deck.cardsFormASet(indices: selected.map { cardButtons.index(of: $0)! }) {
+            selected.forEach { $0.layer.borderColor = UIColor.green.cgColor }
+        } else {
+            selected.forEach { $0.layer.borderColor = UIColor.red.cgColor }
+        }
+        score.text = "Score: \(deck.score)"
+        print(deck.cardsMatchedSoFar)
+        
+        if deck.cardsMatchedSoFar == deck.cards.count, selected.count == 3,
+            deck.cardsFormASet(indices: selected.map { cardButtons.index(of: $0)! }) {
+            selected.forEach { $0.isHidden = true }
+        }
     }
-
-
 }
-
