@@ -12,11 +12,51 @@ class ViewController: UIViewController {
 
     
     var deck: PlayingCardDeck! = nil
+    var numSelected = 0
+    var selected = [UIButton]()
 
     @IBOutlet var cardButtons: [UIButton]!
     
+    @IBOutlet weak var dealThree: UIButton!
+    
     @IBAction func touchCard(_ sender: UIButton) {
-        print("hello moto!")
+        if selected.count < 3  {
+            if selected.contains(sender) {
+                sender.layer.borderColor = UIColor.gray.cgColor
+                selected.remove(at: selected.index(of: sender)!)
+            } else {
+                sender.layer.borderColor = UIColor.blue.cgColor
+                selected.append(sender)
+            }
+            let cardNumbers = selected.map {cardButtons.index(of: $0)! }
+            if selected.count == 3 {
+                if deck.checkIfSetAndReplace(indices: cardNumbers) {
+                    selected.forEach { $0.layer.borderColor = UIColor.green.cgColor }
+                } else {
+                    selected.forEach { $0.layer.borderColor = UIColor.red.cgColor }
+                }
+            }
+            return
+        }
+        guard !selected.contains(sender) else {
+            return
+        }
+        let cardNumbers = selected.map({cardButtons.index(of: $0)!})
+        let isSet = deck.checkIfSetAndReplace(indices: cardNumbers)
+        print(isSet)
+        for c in selected {
+            c.layer.borderColor = UIColor.gray.cgColor
+        }
+        selected = [UIButton]()
+        
+        
+//        if let cardNumber = cardButtons.index(of: sender) {
+//            game.chooseCard(at: cardNumber)
+//            updateViewFromModel()
+//        } else {
+//            print("chosen card was not in cardButtons")
+//        }
+        
     }
     
     override func viewDidLoad() {
@@ -75,14 +115,17 @@ class ViewController: UIViewController {
     
     private func updateViewFromModel() {
         let cardSlotsFlipped = deck.cardSlotsFlipped
-        for index in cardButtons[..<cardSlotsFlipped].indices {
+        for index in cardButtons.indices {
             let button = cardButtons[index]
-            let card = deck.cards[index]
-            button.setAttributedTitle(getCardFace(card: card), for: UIControlState.normal)
-        }
-        for index in cardButtons[cardSlotsFlipped...].indices {
-            let button = cardButtons[index]
-            button.isHidden = true
+            button.layer.borderWidth = 3.0
+            button.layer.borderColor = UIColor.gray.cgColor
+            button.layer.cornerRadius = 4.0
+            if index < cardSlotsFlipped {
+                let card = deck.cards[index]
+                button.setAttributedTitle(getCardFace(card: card), for: UIControlState.normal)
+            } else {
+                button.isHidden = true
+            }
         }
     }
 
