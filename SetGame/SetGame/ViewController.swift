@@ -9,9 +9,9 @@
 import UIKit
 
 class ViewController: UIViewController {
-    var deck: PlayingCardDeck! = nil
-    var numShown = 0
-    var selected = [UIButton]()
+    private var deck: PlayingCardDeck! = nil
+    private var numShown = 0
+    private var selected = [UIButton]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +23,7 @@ class ViewController: UIViewController {
     private var indicesOfSelectedButtons: [Int] {
         return selected.map { cardButtons.index(of: $0)! }
     }
+    
     private var cardsSlotsAreAllInUse: Bool {
         return numShown == cardButtons.count
     }
