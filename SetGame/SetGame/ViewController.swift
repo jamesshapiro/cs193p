@@ -12,6 +12,14 @@ class ViewController: UIViewController {
     var deck: PlayingCardDeck! = nil
     var numShown = 0
     var selected = [UIButton]()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        cardButtons.forEach { $0.layer.borderWidth = 3.0 }
+        cardButtons.forEach { $0.layer.cornerRadius = 8.0 }
+        startNewGame()
+    }
+
     private var indicesOfSelectedButtons: [Int] {
         return selected.map { cardButtons.index(of: $0)! }
     }
@@ -67,14 +75,7 @@ class ViewController: UIViewController {
         updateViewFromModel()
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        cardButtons.forEach { $0.layer.borderWidth = 3.0 }
-        cardButtons.forEach { $0.layer.cornerRadius = 8.0 }
-        startNewGame()
-    }
-    
-    func getCardFace(card: PlayingCard) -> NSAttributedString {
+    private func getCardFace(card: PlayingCard) -> NSAttributedString {
         let buttonSymbol = ["▲", "●", "■"][card.shape.rawValue]
         let buttonText = String(repeating: buttonSymbol, count: card.pipCount.rawValue)
         let color = [UIColor.red, UIColor.green, UIColor.blue][card.color.rawValue]
@@ -115,7 +116,7 @@ class ViewController: UIViewController {
             selected.forEach { $0.layer.borderColor = UIColor.red.cgColor }
         }
         score.text = "Score: \(deck.score)"
-        if cardsSlotsAreAllInUse && !deck.cardsFormASet(with: indicesOfSelectedButtons) {
+        if deck.isOutOfCards || (cardsSlotsAreAllInUse && !deck.cardsFormASet(with: indicesOfSelectedButtons)) {
             dealThreeButton.isEnabled = false
         } else {
             dealThreeButton.isEnabled = true

@@ -42,7 +42,7 @@ struct PlayingCardDeck {
                               matchCandidates.map { $0.color.rawValue },
                               matchCandidates.map { $0.pipCount.rawValue },
                               matchCandidates.map{ $0.shape.rawValue }]
-        let numberOfTypesOfEachDimension = cardDimensions.map { Set($0).count }
+        let numberOfTypesOfEachDimension = cardDimensions.map { $0.unique }
         return numberOfTypesOfEachDimension.filter { $0 == 2 }.count == 0
     }
     
@@ -64,5 +64,11 @@ struct PlayingCardDeck {
             }
         }
         cards = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: cards) as! [PlayingCard]
+    }
+}
+
+private extension Array where Element: Hashable {
+    var unique: Int {
+        return Set(self).count
     }
 }
