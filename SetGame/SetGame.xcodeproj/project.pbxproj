@@ -13,7 +13,7 @@
 		B29A4E6A207ACE45005AC670 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B29A4E69207ACE45005AC670 /* Assets.xcassets */; };
 		B29A4E6D207ACE45005AC670 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B29A4E6B207ACE45005AC670 /* LaunchScreen.storyboard */; };
 		B29A4E75207AD717005AC670 /* PlayingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B29A4E74207AD717005AC670 /* PlayingCard.swift */; };
-		B2B249C4207C5F2D008F2BA8 /* PlayingCardDeck.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B249C3207C5F2D008F2BA8 /* PlayingCardDeck.swift */; };
+		B2B249C4207C5F2D008F2BA8 /* SetCardGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B249C3207C5F2D008F2BA8 /* SetCardGame.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,7 +25,7 @@
 		B29A4E6C207ACE45005AC670 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B29A4E6E207ACE45005AC670 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B29A4E74207AD717005AC670 /* PlayingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingCard.swift; sourceTree = "<group>"; };
-		B2B249C3207C5F2D008F2BA8 /* PlayingCardDeck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlayingCardDeck.swift; path = ../PlayingCardDeck.swift; sourceTree = "<group>"; };
+		B2B249C3207C5F2D008F2BA8 /* SetCardGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SetCardGame.swift; path = ../SetCardGame.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				B29A4E62207ACE43005AC670 /* AppDelegate.swift */,
-				B2B249C3207C5F2D008F2BA8 /* PlayingCardDeck.swift */,
+				B2B249C3207C5F2D008F2BA8 /* SetCardGame.swift */,
 				B29A4E64207ACE43005AC670 /* ViewController.swift */,
 				B29A4E66207ACE43005AC670 /* Main.storyboard */,
 				B29A4E74207AD717005AC670 /* PlayingCard.swift */,
@@ -142,7 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B29A4E65207ACE43005AC670 /* ViewController.swift in Sources */,
-				B2B249C4207C5F2D008F2BA8 /* PlayingCardDeck.swift in Sources */,
+				B2B249C4207C5F2D008F2BA8 /* SetCardGame.swift in Sources */,
 				B29A4E75207AD717005AC670 /* PlayingCard.swift in Sources */,
 				B29A4E63207ACE43005AC670 /* AppDelegate.swift in Sources */,
 			);

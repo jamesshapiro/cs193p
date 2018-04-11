@@ -9,7 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-    private var deck: PlayingCardDeck! = nil
+    private var setGame: SetCardGame! = nil
     private var numShown = 0
     private var selected = [UIButton]()
 
@@ -34,7 +34,7 @@ class ViewController: UIViewController {
     @IBAction func startNewGame() {
         numShown = 0
         selected = [UIButton]()
-        deck = PlayingCardDeck()
+        setGame = SetCardGame()
         cardButtons.forEach { $0.isHidden = true }
         cardButtons.forEach { $0.setTitle(nil, for: UIControlState.normal) }
         cardButtons.forEach { $0.setAttributedTitle(nil, for: UIControlState.normal) }
@@ -45,7 +45,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func dealThree() {
-        if deck.cardsFormASet(with: indicesOfSelectedButtons) {
+        if setGame.cardsFormASet(with: indicesOfSelectedButtons) {
             updateViewFromModel(indicesReceivingNewCards: indicesOfSelectedButtons)
         } else {
             numShown += 3
@@ -57,17 +57,17 @@ class ViewController: UIViewController {
         if selected.count < 3 {
             if selected.contains(sender) {
                 selected.remove(at: selected.index(of: sender)!)
-                deck.updateScore()
+                setGame.updateScore()
             } else {
                 selected.append(sender)
-                deck.updateScore(with: indicesOfSelectedButtons)
+                setGame.updateScore(with: indicesOfSelectedButtons)
             }
         } else {
             // three cases: (1.) user selects a different card (select card)
             //              (2.) user selects a selected card that's part of a match (deselect card)
             //              (3.) user selects a selected card that's part of non-match (select card)
             var dontSelectNewCard = false
-            if deck.cardsFormASet(with: indicesOfSelectedButtons) {
+            if setGame.cardsFormASet(with: indicesOfSelectedButtons) {
                 dontSelectNewCard = selected.contains(sender)
                 updateViewFromModel(indicesReceivingNewCards: indicesOfSelectedButtons)
             }
@@ -91,11 +91,11 @@ class ViewController: UIViewController {
     
     private func updateViewFromModel(indicesReceivingNewCards: [Int]? = nil) {
         if let flipIndices = indicesReceivingNewCards {
-            if deck.isOutOfCards {
+            if setGame.isOutOfCards {
                 flipIndices.forEach { cardButtons[$0].isHidden = true }
             } else {
                 for index in flipIndices {
-                    let card = deck.getNextCard(forIndex: index)
+                    let card = setGame.getNextCard(forIndex: index)
                     let button = cardButtons[index]
                     button.setAttributedTitle(getCardFace(card: card), for: UIControlState.normal)
                     button.layer.borderColor = UIColor.gray.cgColor
@@ -111,13 +111,13 @@ class ViewController: UIViewController {
         
         if selected.count < 3 {
             selected.forEach { $0.layer.borderColor = UIColor.blue.cgColor }
-        } else if deck.cardsFormASet(with: indicesOfSelectedButtons) {
+        } else if setGame.cardsFormASet(with: indicesOfSelectedButtons) {
             selected.forEach { $0.layer.borderColor = UIColor.green.cgColor }
         } else {
             selected.forEach { $0.layer.borderColor = UIColor.red.cgColor }
         }
-        score.text = "Score: \(deck.score)"
-        if deck.isOutOfCards || (cardsSlotsAreAllInUse && !deck.cardsFormASet(with: indicesOfSelectedButtons)) {
+        score.text = "Score: \(setGame.score)"
+        if setGame.isOutOfCards || (cardsSlotsAreAllInUse && !setGame.cardsFormASet(with: indicesOfSelectedButtons)) {
             dealThreeButton.isEnabled = false
         } else {
             dealThreeButton.isEnabled = true

@@ -9,7 +9,7 @@
 import Foundation
 import GameKit
 
-struct PlayingCardDeck {
+struct SetCardGame {
     private var cards = [PlayingCard]()
     private var cardsFlippedSoFar = 0
     var isOutOfCards: Bool {
