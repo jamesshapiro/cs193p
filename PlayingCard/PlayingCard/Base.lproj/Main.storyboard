@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,21 +20,45 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view opaque="NO" contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="Nlo-lB-LwC" customClass="PlayingCardView" customModule="PlayingCard" customModuleProvider="target">
-                                <rect key="frame" x="16" y="44" width="343" height="734"/>
+                                <rect key="frame" x="16" y="136" width="343" height="550"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <gestureRecognizers/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="Nlo-lB-LwC" secondAttribute="height" multiplier="5:8" id="Cw8-Fa-zWj"/>
+                                    <constraint firstAttribute="width" priority="750" constant="800" id="g5T-52-D6a"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="rank">
+                                        <integer key="value" value="8"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="suit" value="♣️"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="LsR-hD-aIg" appends="YES" id="cjF-DY-ogA"/>
+                                </connections>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.6515643147704917" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Nlo-lB-LwC" secondAttribute="trailing" constant="16" id="BAJ-13-C3J"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Nlo-lB-LwC" secondAttribute="bottom" id="HLX-ae-52R"/>
-                            <constraint firstItem="Nlo-lB-LwC" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="Lgd-qh-86a"/>
-                            <constraint firstItem="Nlo-lB-LwC" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="k2t-la-ldv"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Nlo-lB-LwC" secondAttribute="trailing" constant="16" id="BAJ-13-C3J"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Nlo-lB-LwC" secondAttribute="bottom" constant="16" id="HLX-ae-52R"/>
+                            <constraint firstItem="Nlo-lB-LwC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="Lgd-qh-86a"/>
+                            <constraint firstItem="Nlo-lB-LwC" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="Y4Q-Pn-xf9"/>
+                            <constraint firstItem="Nlo-lB-LwC" firstAttribute="top" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="k2t-la-ldv"/>
+                            <constraint firstItem="Nlo-lB-LwC" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="lmC-PU-MXV"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="playingCardView" destination="Nlo-lB-LwC" id="Uof-9N-tbV"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="LsR-hD-aIg">
+                    <connections>
+                        <action selector="flipCard:" destination="BYZ-38-t0r" id="pk0-A6-Gzo"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="140" y="132.26600985221674"/>
         </scene>
