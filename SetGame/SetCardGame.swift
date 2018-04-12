@@ -5,6 +5,7 @@
 //  Created by James Shapiro on 4/8/18.
 //  Copyright © 2018 James Shapiro. All rights reserved.
 //
+//  Combinations function copied from: https://github.com/almata/Combinatorics/blob/master/Combinatorics/Combinatorics.swift
 
 import Foundation
 import GameKit
@@ -12,9 +13,14 @@ import GameKit
 struct SetCardGame {
     private var cards = [PlayingCard]()
     private var cardsFlippedSoFar = 0
+    private var cardsMatched = [Int]()
     var isOutOfCards: Bool {
         return cardsFlippedSoFar == cards.count
     }
+    private var cardsOnTable: [Int] {
+        return Array(slotsToDeck.keys)
+    }
+    
     private var slotsToDeck = [Int: Int]()
     private(set) var score = 0
     
@@ -25,6 +31,7 @@ struct SetCardGame {
             }
             if cardsFormASet(with: indices) {
                 score += 3
+                indices.forEach { cardsMatched.append(slotsToDeck[$0]!) }
             } else {
                 score -= 5
             }
@@ -64,6 +71,41 @@ struct SetCardGame {
             }
         }
         cards = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: cards) as! [PlayingCard]
+    }
+    
+    func getCombos() -> [Int]? {
+        let cardCombos = combinationsWithoutRepetitionFrom(cardsOnTable, taking: 3)
+        var detectedSets = [[Int]]()
+        for combo in cardCombos {
+            if cardsFormASet(with: combo) {
+                detectedSets.append(combo)
+            }
+        }
+        detectedSets = detectedSets.filter { $0
+            .map({!cardsMatched.contains(slotsToDeck[$0]!)})
+            .reduce(true, {x, y in x && y})
+        }
+        if detectedSets.count > 0 {
+            print(detectedSets[0])
+        }
+        return detectedSets.count > 0 ? detectedSets[0] : nil
+    }
+
+    private func combinationsWithoutRepetitionFrom<T>(_ elements: [T], taking: Int) -> [[T]] {
+        guard elements.count >= taking else { return [] }
+        guard elements.count > 0 && taking > 0 else { return [[]] }
+        
+        if taking == 1 {
+            return elements.map {[$0]}
+        }
+        
+        var combinations = [[T]]()
+        for (index, element) in elements.enumerated() {
+            var reducedElements = elements
+            reducedElements.removeFirst(index + 1)
+            combinations += combinationsWithoutRepetitionFrom(reducedElements, taking: taking - 1).map {[element] + $0}
+        }
+        return combinations
     }
 }
 

@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     private var setGame: SetCardGame! = nil
     private var numShown = 0
     private var selected = [UIButton]()
+    private var cheatSuggestion = [UIButton]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,12 +29,23 @@ class ViewController: UIViewController {
         return numShown == cardButtons.count
     }
     
+    @IBAction func cheat(_ sender: UIButton) {
+        if let combo = setGame.getCombos() {
+            for item in combo {
+                if !selected.contains(cardButtons[item]) {
+                    cardButtons[item].layer.borderColor = UIColor.orange.cgColor
+                }
+                cheatSuggestion.append(cardButtons[item])
+            }
+        }
+    }
     @IBOutlet weak var dealThreeButton: UIButton!
     @IBOutlet var cardButtons: [UIButton]!
     @IBOutlet weak var score: UILabel!
     @IBAction func startNewGame() {
         numShown = 0
         selected = [UIButton]()
+        cheatSuggestion = [UIButton]()
         setGame = SetCardGame()
         cardButtons.forEach { $0.isHidden = true }
         cardButtons.forEach { $0.setTitle(nil, for: UIControlState.normal) }
@@ -54,6 +66,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func touchCard(_ sender: UIButton) {
+        print(cardButtons.index(of: sender)!)
         if selected.count < 3 {
             if selected.contains(sender) {
                 selected.remove(at: selected.index(of: sender)!)
@@ -61,6 +74,9 @@ class ViewController: UIViewController {
             } else {
                 selected.append(sender)
                 setGame.updateScore(with: indicesOfSelectedButtons)
+            }
+            if selected.count == 3 {
+                cheatSuggestion = [UIButton]()
             }
         } else {
             // three cases: (1.) user selects a different card (select card)
@@ -121,6 +137,11 @@ class ViewController: UIViewController {
             dealThreeButton.isEnabled = false
         } else {
             dealThreeButton.isEnabled = true
+        }
+        for button in cheatSuggestion {
+            if !selected.contains(button) {
+                button.layer.borderColor = UIColor.orange.cgColor
+            }
         }
     }
 }
