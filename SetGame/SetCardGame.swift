@@ -81,9 +81,8 @@ struct SetCardGame {
                 detectedSets.append(combo)
             }
         }
-        detectedSets = detectedSets.filter { $0
-            .map({!cardsMatched.contains(slotsToDeck[$0]!)})
-            .reduce(true, {x, y in x && y})
+        detectedSets = detectedSets.filter {
+            !$0.contains(where: {cardsMatched.contains(slotsToDeck[$0]!)})
         }
         if detectedSets.count > 0 {
             print(detectedSets[0])

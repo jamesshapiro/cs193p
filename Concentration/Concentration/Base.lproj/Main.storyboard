@@ -27,7 +27,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                         <state key="normal" title="Sports"/>
                                         <connections>
-                                            <segue destination="BYZ-38-t0r" kind="showDetail" identifier="Choose Theme" id="XBn-jN-HBQ"/>
+                                            <action selector="changeTheme:" destination="k2w-zI-2mw" eventType="touchUpInside" id="Zco-df-U5H"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xDf-Op-mfr">
@@ -35,7 +35,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                         <state key="normal" title="Food"/>
                                         <connections>
-                                            <segue destination="BYZ-38-t0r" kind="showDetail" identifier="Choose Theme" id="FQB-eh-IO0"/>
+                                            <action selector="changeTheme:" destination="k2w-zI-2mw" eventType="touchUpInside" id="lkJ-zh-GzW"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cBh-Zr-aXM">
@@ -43,7 +43,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                         <state key="normal" title="Animals"/>
                                         <connections>
-                                            <segue destination="BYZ-38-t0r" kind="showDetail" identifier="Choose Theme" id="4Qz-o8-kdX"/>
+                                            <action selector="changeTheme:" destination="k2w-zI-2mw" eventType="touchUpInside" id="tUO-w9-INi"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VhJ-wF-ARF">
@@ -51,7 +51,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                         <state key="normal" title="Flags"/>
                                         <connections>
-                                            <segue destination="BYZ-38-t0r" kind="showDetail" identifier="Choose Theme" id="7dl-1x-ZYk"/>
+                                            <action selector="changeTheme:" destination="k2w-zI-2mw" eventType="touchUpInside" id="MnS-40-mrT"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GPS-AJ-crr">
@@ -59,7 +59,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                         <state key="normal" title="Time"/>
                                         <connections>
-                                            <segue destination="BYZ-38-t0r" kind="showDetail" identifier="Choose Theme" id="XH4-MO-7qm"/>
+                                            <action selector="changeTheme:" destination="k2w-zI-2mw" eventType="touchUpInside" id="Glp-D1-xsR"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iRy-Kn-a6W">
@@ -67,7 +67,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                         <state key="normal" title="Halloween"/>
                                         <connections>
-                                            <segue destination="BYZ-38-t0r" kind="showDetail" identifier="Choose Theme" id="jNF-Fy-dke"/>
+                                            <action selector="changeTheme:" destination="k2w-zI-2mw" eventType="touchUpInside" id="F2S-4B-Znd"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -81,6 +81,9 @@
                         <viewLayoutGuide key="safeArea" id="5J8-M2-KAT"/>
                     </view>
                     <navigationItem key="navigationItem" id="7hF-vq-93i"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="showDetail" identifier="Choose Theme" id="rgZ-70-tg3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="is9-uO-wa6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -410,6 +413,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="6M9-2k-MWr"/>
+        <segue reference="rgZ-70-tg3"/>
     </inferredMetricsTieBreakers>
 </document>

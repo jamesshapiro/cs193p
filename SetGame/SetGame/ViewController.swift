@@ -29,16 +29,6 @@ class ViewController: UIViewController {
         return numShown == cardButtons.count
     }
     
-    @IBAction func cheat(_ sender: UIButton) {
-        if let combo = setGame.getCombos() {
-            for item in combo {
-                if !selected.contains(cardButtons[item]) {
-                    cardButtons[item].layer.borderColor = UIColor.orange.cgColor
-                }
-                cheatSuggestion.append(cardButtons[item])
-            }
-        }
-    }
     @IBOutlet weak var dealThreeButton: UIButton!
     @IBOutlet var cardButtons: [UIButton]!
     @IBOutlet weak var score: UILabel!
@@ -64,6 +54,19 @@ class ViewController: UIViewController {
             updateViewFromModel(indicesReceivingNewCards: Array(numShown-3..<numShown))
         }
     }
+    @IBAction func cheat(_ sender: UIButton) {
+        if setGame.cardsFormASet(with: indicesOfSelectedButtons) {
+            updateViewFromModel(indicesReceivingNewCards: indicesOfSelectedButtons)
+        }
+        selected = [UIButton]()
+        if let combo = setGame.getCombos() {
+            for item in combo {
+                cheatSuggestion.append(cardButtons[item])
+            }
+        }
+        updateViewFromModel()
+    }
+
     
     @IBAction func touchCard(_ sender: UIButton) {
         print(cardButtons.index(of: sender)!)
