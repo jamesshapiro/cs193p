@@ -17,7 +17,8 @@ struct SetCardGame {
     var isOutOfCards: Bool {
         return cardsFlippedSoFar == cards.count
     }
-    private var cardsOnTable: [Int] {
+    
+    private var indicesOfActiveCardSlots: [Int] {
         return Array(slotsToDeck.keys)
     }
     
@@ -31,7 +32,7 @@ struct SetCardGame {
             }
             if cardsFormASet(with: indices) {
                 score += 3
-                indices.forEach { cardsMatched.append(slotsToDeck[$0]!) }
+                cardsMatched += indices.map { slotsToDeck[$0]! }
             } else {
                 score -= 5
             }
@@ -73,19 +74,11 @@ struct SetCardGame {
         cards = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: cards) as! [PlayingCard]
     }
     
-    func getCombos() -> [Int]? {
-        let cardCombos = combinationsWithoutRepetitionFrom(cardsOnTable, taking: 3)
-        var detectedSets = [[Int]]()
-        for combo in cardCombos {
-            if cardsFormASet(with: combo) {
-                detectedSets.append(combo)
-            }
-        }
+    func findASetOfCards() -> [Int]? {
+        let everyCombinationOfCardsOnTheBoard = combinationsWithoutRepetitionFrom(indicesOfActiveCardSlots, taking: 3)
+        var detectedSets = everyCombinationOfCardsOnTheBoard.filter { cardsFormASet(with: $0) }
         detectedSets = detectedSets.filter {
             !$0.contains(where: {cardsMatched.contains(slotsToDeck[$0]!)})
-        }
-        if detectedSets.count > 0 {
-            print(detectedSets[0])
         }
         return detectedSets.count > 0 ? detectedSets[0] : nil
     }
