@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class SetGameOnePlayerViewController: UIViewController {
     private var setGame: SetCardGame! = nil
     private var numShown = 0
     private var selected = [UIButton]()
@@ -61,6 +61,9 @@ class ViewController: UIViewController {
     @IBAction func cheat(_ sender: UIButton) {
         if setGame.cardsFormASet(with: indicesOfSelectedButtons) {
             updateViewFromModel(indicesReceivingNewCards: indicesOfSelectedButtons)
+        }
+        guard cheatSuggestions.count == 0 else {
+            return
         }
         selected = [UIButton]()
         if let combo = setGame.findASetOfCards() {
@@ -125,6 +128,12 @@ class ViewController: UIViewController {
                     button.isHidden = false
                 }
                 selected = [UIButton]()
+            }
+        }
+        if cheatSuggestions.count > 1 {
+            let shouldClearCheatSuggestions = selected.filter {!cheatSuggestions.contains($0)}.count > 0
+            if shouldClearCheatSuggestions {
+                cheatSuggestions = [UIButton]()
             }
         }
         
