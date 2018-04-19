@@ -14,6 +14,7 @@ struct SetCardGame {
     private var cards = [PlayingCard]()
     private var cardsFlippedSoFar = 0
     private var cardsMatched = [Int]()
+    
     var isOutOfCards: Bool {
         return cardsFlippedSoFar == cards.count
     }

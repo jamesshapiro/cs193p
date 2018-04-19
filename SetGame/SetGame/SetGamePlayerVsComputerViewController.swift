@@ -19,6 +19,12 @@ class SetGamePlayerVsComputerViewController: UIViewController {
             cardButtons.forEach { $0.layer.borderWidth = 3.0 }
             cardButtons.forEach { $0.layer.cornerRadius = 8.0 }
             startNewGame()
+            weak var timer: Timer?
+            var numTimers = 0
+            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) {timer in
+                print("timer! \(numTimers)")
+                numTimers += 1
+            }
         }
         
         private var indicesOfSelectedButtons: [Int] {
