@@ -10,10 +10,13 @@
 import Foundation
 import GameKit
 
+// TODO: Implement a penalty for pressing Deal Three
+
 struct SetCardGame {
     private var cards = [PlayingCard]()
     private var cardsFlippedSoFar = 0
     private var cardsMatched = [Int]()
+    var now = Date()
     
     var isOutOfCards: Bool {
         return cardsFlippedSoFar == cards.count
@@ -25,6 +28,16 @@ struct SetCardGame {
     
     private var slotsToDeck = [Int: Int]()
     private(set) var score = 0
+    private(set) var computerScore = 0
+    
+    mutating func updatePlayerVsComputerScore(with indices: [Int], forHuman: Bool) {
+        if forHuman {
+            score += 1
+        } else {
+            computerScore += 1
+        }
+        cardsMatched += indices.map { slotsToDeck[$0]! }
+    }
     
     mutating func updateScore(with indices: [Int]? = nil) {
         if let indices = indices {
@@ -32,7 +45,9 @@ struct SetCardGame {
                 return
             }
             if cardsFormASet(with: indices) {
-                score += 3
+                let timeBonus = 3 * max(9 + Int(now.timeIntervalSinceNow), 0)
+                now = Date()
+                score += 3 + timeBonus
                 cardsMatched += indices.map { slotsToDeck[$0]! }
             } else {
                 score -= 5
