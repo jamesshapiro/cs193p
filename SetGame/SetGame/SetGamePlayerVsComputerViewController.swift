@@ -41,6 +41,11 @@ class SetGamePlayerVsComputerViewController: UIViewController {
                 if let setOfCards = self.setGame.findASetOfCards() {
                     self.selected = setOfCards.map { self.cardButtons[$0] }
                     self.setGame.updatePlayerVsComputerScore(with: self.indicesOfSelectedButtons, forHuman: false)
+                    self.computerWonRound = true
+                    self.cardButtons.forEach {
+                        $0.isEnabled = false
+                    }
+                    self.updateViewFromModel()
                 } else {
                     if self.setGame.isOutOfCards {
                         if self.setGame.score > self.setGame.computerScore {
@@ -59,11 +64,6 @@ class SetGamePlayerVsComputerViewController: UIViewController {
                     }
                 }
                 
-                self.computerWonRound = true
-                self.cardButtons.forEach {
-                    $0.isEnabled = false
-                }
-                self.updateViewFromModel()
                 self.setTimer(interval: 3.0)
             case .laughing:
                 self.setTimer(interval: thonkingTime)
