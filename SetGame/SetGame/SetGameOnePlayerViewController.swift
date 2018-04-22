@@ -54,6 +54,9 @@ class SetGameOnePlayerViewController: UIViewController {
             updateViewFromModel(indicesReceivingNewCards: indicesOfSelectedButtons)
         } else {
             numShown += 3
+            if setGame.findASetOfCards() != nil {
+                setGame.updateScore(unnecessaryDrawThree: true)
+            }
             updateViewFromModel(indicesReceivingNewCards: Array(numShown-3..<numShown))
         }
     }

@@ -10,8 +10,6 @@
 import Foundation
 import GameKit
 
-// TODO: Implement a penalty for pressing Deal Three
-
 struct SetCardGame {
     private var cards = [PlayingCard]()
     private var cardsFlippedSoFar = 0
@@ -39,7 +37,13 @@ struct SetCardGame {
         cardsMatched += indices.map { slotsToDeck[$0]! }
     }
     
-    mutating func updateScore(with indices: [Int]? = nil) {
+    mutating func updateScore(with indices: [Int]? = nil, unnecessaryDrawThree: Bool = false) {
+        if unnecessaryDrawThree {
+            if cardsFlippedSoFar >= 12 {
+                score -= 30
+            }
+            return
+        }
         if let indices = indices {
             if indices.count < 3 {
                 return
