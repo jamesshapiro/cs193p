@@ -26,10 +26,14 @@ class PlayingCardView: UIView {
 //            context.fillPath()
 //        }
         let path = UIBezierPath()
-        path.addArc(withCenter: CGPoint(x: bounds.midX, y: bounds.midY), radius: 100.0,
-                    startAngle: 0, endAngle: CGFloat.pi/2, clockwise: true)
-        path.lineWidth = 5.0
-        UIColor.red.setStroke()
+        path.move(to: CGPoint(x: 0.2 * bounds.width, y: bounds.midY))
+        path.addCurve(to: CGPoint(x: 0.8 * bounds.width, y: 0.4 * bounds.height),
+                      controlPoint1: CGPoint(x: 0.4 * bounds.width, y: 0.35 * bounds.height),
+                      controlPoint2: CGPoint(x: 0.6 * bounds.width, y: 0.55 * bounds.height))
+        path.addQuadCurve(to: CGPoint(x: 0.8 * bounds.width, y: 0.3 * bounds.height),
+                          controlPoint: CGPoint(x: 0.85 * bounds.width, y: 0.35 * bounds.height))
+        path.lineWidth = 2.0
+        UIColor.black.setStroke()
         path.stroke()
     }
 
