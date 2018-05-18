@@ -15,6 +15,8 @@
 		B22CB66F2092FA4B00E9E817 /* SetGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22CB66E2092FA4B00E9E817 /* SetGame.swift */; };
 		B22CB6712092FA7200E9E817 /* PlayingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22CB6702092FA7200E9E817 /* PlayingCard.swift */; };
 		B2B7A55220AC1EAC0093C317 /* PlayingCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7A55120AC1EAC0093C317 /* PlayingCardView.swift */; };
+		B2B7A55420AEB4110093C317 /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B7A55320AEB4110093C317 /* Grid.swift */; };
+		B2D15D9820AF89EC00DCB944 /* SquigglyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D15D9720AF89EC00DCB944 /* SquigglyView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		B22CB66E2092FA4B00E9E817 /* SetGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetGame.swift; sourceTree = "<group>"; };
 		B22CB6702092FA7200E9E817 /* PlayingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingCard.swift; sourceTree = "<group>"; };
 		B2B7A55120AC1EAC0093C317 /* PlayingCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayingCardView.swift; sourceTree = "<group>"; };
+		B2B7A55320AEB4110093C317 /* Grid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Grid.swift; path = ../../../../../Desktop/Grid.swift; sourceTree = "<group>"; };
+		B2D15D9720AF89EC00DCB944 /* SquigglyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquigglyView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,8 +71,10 @@
 				B22CB6652092FA1D00E9E817 /* LaunchScreen.storyboard */,
 				B22CB6682092FA1D00E9E817 /* Info.plist */,
 				B22CB66E2092FA4B00E9E817 /* SetGame.swift */,
+				B2B7A55320AEB4110093C317 /* Grid.swift */,
 				B22CB6702092FA7200E9E817 /* PlayingCard.swift */,
 				B2B7A55120AC1EAC0093C317 /* PlayingCardView.swift */,
+				B2D15D9720AF89EC00DCB944 /* SquigglyView.swift */,
 			);
 			path = GraphicalSet;
 			sourceTree = "<group>";
@@ -144,11 +150,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2D15D9820AF89EC00DCB944 /* SquigglyView.swift in Sources */,
 				B22CB65F2092FA1C00E9E817 /* ViewController.swift in Sources */,
 				B22CB66F2092FA4B00E9E817 /* SetGame.swift in Sources */,
 				B22CB6712092FA7200E9E817 /* PlayingCard.swift in Sources */,
 				B2B7A55220AC1EAC0093C317 /* PlayingCardView.swift in Sources */,
 				B22CB65D2092FA1C00E9E817 /* AppDelegate.swift in Sources */,
+				B2B7A55420AEB4110093C317 /* Grid.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
