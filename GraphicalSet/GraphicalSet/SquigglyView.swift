@@ -20,27 +20,63 @@ class SquigglyView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
+
+    func setBorder(path: UIBezierPath) {
+        path.close()
+        path.addClip()
+        path.lineWidth = -5.0
+        UIColor.black.setStroke()
+        path.stroke()
+    }
+    
+    func drawPill() {
+        let path = UIBezierPath()
+        path.move(to: CGPoint(x: 0.25 * bounds.width, y: 0.2 * bounds.height))
+        path.addArc(withCenter: CGPoint(x: 0.25 * bounds.width, y: 0.5 * bounds.height), radius: 0.3 * bounds.height, startAngle: CGFloat.pi * 0.5, endAngle: CGFloat.pi * 1.5, clockwise: true)
+        path.addLine(to: CGPoint(x: 0.25 * bounds.width, y: 0.8 * bounds.height))
+//        path.move(to: CGPoint(x: 0.25 * bounds.width, y: 0.8 * bounds.height))
+        path.addLine(to: CGPoint(x: 0.75 * bounds.width, y: 0.8 * bounds.height))
+        path.addArc(withCenter: CGPoint(x: 0.75 * bounds.width, y: 0.5 * bounds.height), radius: 0.3 * bounds.height, startAngle: CGFloat.pi * 1.5, endAngle: CGFloat.pi * 2.5, clockwise: true)
+        path.addLine(to: CGPoint(x: 0.75 * bounds.width, y: 0.2 * bounds.height))
+//        path.move(to: CGPoint(x: 0.75 * bounds.width, y: 0.2 * bounds.height))
+        path.addLine(to: CGPoint(x: 0.25 * bounds.width, y: 0.2 * bounds.height))
+        setBorder(path: path)
+    }
+    
+    func drawDiamond() {
+        let path = UIBezierPath()
+        path.move(to: CGPoint(x: 0.1 * bounds.width, y: bounds.height * 0.5))
+        path.addLine(to: CGPoint(x: bounds.width * 0.5, y: bounds.height * 0.9))
+        path.addLine(to: CGPoint(x: bounds.width * 0.9, y: bounds.height * 0.5))
+        path.addLine(to: CGPoint(x: bounds.width * 0.5, y: 0.1 * bounds.height))
+        setBorder(path: path)
+    }
     
     func drawSquiggly(startingPoint: CGPoint) {
         let x = startingPoint.x
         let y = startingPoint.y
-        let squigglyCurve1Width = 0.6 * bounds.width
-        let squigglyCurve1Height = 0.1 * bounds.height
+        let horizontalScaleFactor = CGFloat(1.3)
+        let verticalScaleFactor = CGFloat(5.0)
+        let squigglyCurve1Width = 0.6 * bounds.width * horizontalScaleFactor
+        let squigglyCurve1Height = 0.1 * bounds.height * verticalScaleFactor
         let squiggly1Dest = CGPoint(x: x + squigglyCurve1Width, y: y - squigglyCurve1Height)
-        let curve1controlPoint1Width = 0.2 * bounds.width
-        let curve1controlPoint1Height = -0.15 * bounds.height
+        let curve1controlPoint1Width = 0.2 * bounds.width * horizontalScaleFactor
+        let curve1controlPoint1Height = -0.15 * bounds.height * verticalScaleFactor
         let curve1controlPoint1 = CGPoint(x: x + curve1controlPoint1Width, y: y + curve1controlPoint1Height)
-        let curve1controlPoint2Width = 0.4 * bounds.width
-        let curve1controlPoint2Height = 0.05 * bounds.height
+        let curve1controlPoint2Width = 0.4 * bounds.width * horizontalScaleFactor
+        let curve1controlPoint2Height = 0.05 * bounds.height * verticalScaleFactor
         let curve1controlPoint2 = CGPoint(x: x + curve1controlPoint2Width, y: y + curve1controlPoint2Height)
         let squiggly2Dest = CGPoint(x: x + squigglyCurve1Width, y: y - 2 * squigglyCurve1Height)
-        let squiggly2controlPoint = CGPoint(x: x + squigglyCurve1Width + 0.06 * bounds.width,
-                                            y: y - 0.15 * bounds.height)
+        let squiggly2controlPoint = CGPoint(x: x + squigglyCurve1Width + (0.06 * bounds.width * horizontalScaleFactor),
+                                            y: y - (0.15 * bounds.height * verticalScaleFactor))
         let squiggly3Dest = CGPoint(x: x, y: y - squigglyCurve1Height)
-        let squiggly3controlPoint1 = CGPoint(x: x + 0.4 * bounds.width, y: y - 0.025 * bounds.height)
-        let squiggly3controlPoint2 = CGPoint(x: x + 0.2 * bounds.width, y: y - 0.225 * bounds.height)
+        let squiggly3controlPoint1 = CGPoint(x: x + (0.4 * bounds.width * horizontalScaleFactor),
+                                             y: y - (0.025 * bounds.height * verticalScaleFactor))
+        let squiggly3controlPoint2 = CGPoint(x: x + (0.2 * bounds.width * horizontalScaleFactor),
+                                             y: y - (0.225 * bounds.height * verticalScaleFactor))
         let squiggly4dest = CGPoint(x: x, y: y)
-        let squiggly4controlPoint = CGPoint(x: x - 0.06 * bounds.width, y: y - 0.05 * bounds.height)
+        let squiggly4controlPoint = CGPoint(x: x - (0.06 * bounds.width * horizontalScaleFactor),
+                                            y: y - (0.05 * bounds.height * verticalScaleFactor))
         let path = UIBezierPath()
         path.move(to: CGPoint(x: x, y: y))
         path.addCurve(to: squiggly1Dest,
@@ -53,20 +89,15 @@ class SquigglyView: UIView {
                       controlPoint2: squiggly3controlPoint2)
         path.addQuadCurve(to: squiggly4dest,
                           controlPoint: squiggly4controlPoint)
-        path.close()
-        path.addClip()
-        path.lineWidth = -5.0
-        UIColor.black.setStroke()
-        path.stroke()
+        setBorder(path: path)
     }
 
-    override func draw(_ rect: CGRect) {
-        let startingPoint = CGPoint(x: 0.2 * bounds.width, y: 0.5 * bounds.height)
+    func squiggle() {
+        let startingPoint = CGPoint(x: 0.1 * bounds.width, y: bounds.height)
         drawSquiggly(startingPoint: startingPoint)
-        //        let startingPoint2 = CGPoint(x: 0.2 * bounds.width, y: 0.2 * bounds.height)
-        //        drawSquiggly(startingPoint: startingPoint2)
-        //        let startingPoint3 = CGPoint(x: 0.2 * bounds.width, y: 0.8 * bounds.height)
-        //        drawSquiggly(startingPoint: startingPoint3)
+    }
+    
+    func stripe() {
         for i in 0..<Int(bounds.width) {
             let stripeWidth = CGFloat(8)
             if i % (Int(stripeWidth) * 2) == 0 {
@@ -81,6 +112,29 @@ class SquigglyView: UIView {
                 newPath.fill()
             }
         }
+    }
+
+    func fill() {
+        let newPath = UIBezierPath()
+        newPath.move(to: CGPoint(x: 0, y: 0))
+        newPath.addLine(to: CGPoint(x: 0, y: bounds.height))
+        newPath.addLine(to: CGPoint(x: bounds.width, y: bounds.height))
+        newPath.addLine(to: CGPoint(x: bounds.width, y: 0))
+        newPath.close()
+        UIColor.red.setFill()
+        newPath.fill()
+    }
+    
+    override func draw(_ rect: CGRect) {
+//        squiggle()
+        drawDiamond()
+//        drawPill()
+        fill()
+//        stripe()
+        //        let startingPoint2 = CGPoint(x: 0.2 * bounds.width, y: 0.2 * bounds.height)
+        //        drawSquiggly(startingPoint: startingPoint2)
+        //        let startingPoint3 = CGPoint(x: 0.2 * bounds.width, y: 0.8 * bounds.height)
+        //        drawSquiggly(startingPoint: startingPoint3)
     }
 
 }
